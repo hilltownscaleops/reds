@@ -3,16 +3,54 @@ import { supabase } from '../supabaseClient';
 import {
   MEAL_LABELS,
   calculateBaseWeeklyCost,
-  calculateNetPayable,
   formatCurrency,
   formatPreference,
   normalizeMealPlan,
   toNumber,
 } from '../erpHelpers';
 
+// Helper: Calculates eaten amount for a specific batch of days
+function calculateWeeklyEaten(customer, rosterRows, settings) {
+  if (!rosterRows || rosterRows.length === 0) return 0;
+
+  let eatenTotal = 0;
+
+  rosterRows.forEach((row) => {
+    // Breakfast
+    if (row.b_status === 'active') eatenTotal += toNumber(settings.base_breakfast);
+    
+    // Lunch
+    if (row.l_status === 'active' || row.l_status === 'nv_downgraded') {
+      eatenTotal += toNumber(settings.base_lunch);
+    } else if (row.l_status === 'active_nv') {
+      eatenTotal += toNumber(settings.base_lunch) + toNumber(settings.nv_premium);
+    }
+    
+    // Dinner
+    if (row.d_status === 'active' || row.d_status === 'nv_downgraded') {
+      eatenTotal += toNumber(settings.base_dinner);
+    } else if (row.d_status === 'active_nv') {
+      eatenTotal += toNumber(settings.base_dinner) + toNumber(settings.nv_premium);
+    }
+  });
+
+  return eatenTotal;
+}
+
+// Helper: Calculates lifetime eaten across all rosters
+function calculateLifetimeEaten(customer, allRosters, settings) {
+  const customerRosters = allRosters.filter((r) => String(r.customer_id) === String(customer.id));
+  
+  // The math is now strictly literal based on the roster status (Active vs Active NV). 
+  // We no longer need to group by weeks to restrict NV premiums in the background.
+  return calculateWeeklyEaten(customer, customerRosters, settings);
+}
+
 export default function BillingDashboard() {
   const [customers, setCustomers] = useState([]);
   const [settings, setSettings] = useState(null);
+  const [roster, setRoster] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [paymentData, setPaymentData] = useState({});
@@ -25,19 +63,24 @@ export default function BillingDashboard() {
       setLoading(true);
       setMessage('');
 
-      const [settingsResult, customersResult] = await Promise.all([
+      // Fetch absolute truth from all tables (limit elevated to handle lifetime history)
+      const [settingsResult, customersResult, rosterResult, txResult] = await Promise.all([
         supabase.from('global_settings').select('*').single(),
-        supabase.from('customers').select('id, name, meal_plan, preference, credit_balance').order('name', { ascending: true }),
+        supabase.from('customers').select('*').order('name', { ascending: true }),
+        supabase.from('daily_roster').select('*').limit(10000),
+        supabase.from('transactions').select('*').limit(10000),
       ]);
 
       if (cancelled) return;
 
       if (settingsResult.error || customersResult.error) {
-        setMessage(settingsResult.error?.message ?? customersResult.error?.message ?? 'Unable to load billing data.');
+        setMessage('Unable to load ledger data.');
       }
 
       setSettings(settingsResult.data ?? null);
       setCustomers(customersResult.data ?? []);
+      setRoster(rosterResult.data ?? []);
+      setTransactions(txResult.data ?? []);
       setLoading(false);
     }
 
@@ -48,22 +91,37 @@ export default function BillingDashboard() {
     };
   }, []);
 
-  const rows = useMemo(
-    () =>
-      customers.map((customer) => {
-        const baseCost = calculateBaseWeeklyCost(customer, settings);
-        const rawNetPayable = calculateNetPayable(customer, settings);
+  const rows = useMemo(() => {
+    if (!settings) return [];
+    
+    return customers.map((customer) => {
+      // 1. Calculate Total Eaten (Lifetime)
+      const lifetimeEaten = calculateLifetimeEaten(customer, roster, settings);
+      
+      // 2. Calculate Total Top-ups (Lifetime)
+      const customerTx = transactions.filter((tx) => String(tx.customer_id) === String(customer.id));
+      const lifetimeTopup = customerTx.reduce((sum, tx) => sum + toNumber(tx.amount), 0);
+      
+      // 3. Runtime Carry-over
+      const carryover = lifetimeTopup - lifetimeEaten;
+      
+      // 4. Base Plan for Next Week
+      const baseWeekPlan = calculateBaseWeeklyCost(customer, settings);
+      
+      // 5. Suggested Top-up
+      const suggestedTopup = Math.max(0, baseWeekPlan - carryover);
 
-        return {
-          ...customer,
-          mealPlan: normalizeMealPlan(customer.meal_plan),
-          baseCost,
-          rawNetPayable,
-          settlementDue: Math.max(rawNetPayable, 0),
-        };
-      }),
-    [customers, settings],
-  );
+      return {
+        ...customer,
+        mealPlan: normalizeMealPlan(customer.meal_plan),
+        lifetimeEaten,
+        lifetimeTopup,
+        carryover,
+        baseWeekPlan,
+        suggestedTopup,
+      };
+    });
+  }, [customers, settings, roster, transactions]);
 
   function handleInputChange(customerId, field, value) {
     setPaymentData((previous) => ({
@@ -81,13 +139,14 @@ export default function BillingDashboard() {
     const upiId = payment.upi?.trim() || 'CASH';
 
     if (!Number.isFinite(amountPaid) || amountPaid <= 0) {
-      setMessage('Enter a valid payment amount before settling the bill.');
+      setMessage('Enter a valid payment amount.');
       return;
     }
 
     setSavingCustomerId(customer.id);
     setMessage('');
 
+    // Log the transaction. (We NO LONGER update the customer's credit_balance table!)
     const transactionResult = await supabase.from('transactions').insert([
       {
         customer_id: customer.id,
@@ -102,70 +161,44 @@ export default function BillingDashboard() {
       return;
     }
 
-    const nextCreditBalance = toNumber(customer.credit_balance) + amountPaid - customer.settlementDue;
-    const updateResult = await supabase.from('customers').update({ credit_balance: nextCreditBalance }).eq('id', customer.id);
-
-    setSavingCustomerId(null);
-
-    if (updateResult.error) {
-      setMessage(updateResult.error.message ?? 'Error updating credit balance.');
-      return;
-    }
-
     setMessage(`Logged ${formatCurrency(amountPaid)} for ${customer.name}.`);
-    setPaymentData((previous) => ({
-      ...previous,
-      [customer.id]: {},
-    }));
-
-    const { data } = await supabase.from('customers').select('id, name, meal_plan, preference, credit_balance').order('name', { ascending: true });
-    setCustomers(data ?? []);
+    
+    // Clear the input and instantly refresh the transaction state to update the UI Math
+    setPaymentData((previous) => ({ ...previous, [customer.id]: {} }));
+    
+    const { data: updatedTx } = await supabase.from('transactions').select('*').limit(10000);
+    setTransactions(updatedTx ?? []);
+    setSavingCustomerId(null);
   }
 
   return (
     <section className="panel">
       <div className="panel__header">
         <div>
-          <span className="eyebrow">Weekly Billing</span>
-          <h2>Base plan, carry-forward, and settlement</h2>
-          <p>Base cost is derived from each customer’s meal plan and global settings, then the current credit is deducted.</p>
-        </div>
-      </div>
-
-      <div className="summary-strip">
-        <div className="summary-card">
-          <span>Customers</span>
-          <strong>{customers.length}</strong>
-        </div>
-        <div className="summary-card">
-          <span>Status</span>
-          <strong>{loading ? 'Loading' : 'Ready'}</strong>
-        </div>
-        <div className="summary-card">
-          <span>NV premium</span>
-          <strong>{settings ? formatCurrency(settings.nv_premium) : '—'}</strong>
+          <span className="eyebrow">Lifetime Ledger</span>
+          <h2>Runtime Carry-over & Top-ups</h2>
+          <p>Calculates absolute truth: (Total Money Received) - (Total Food Eaten) = Current Carry-over.</p>
         </div>
       </div>
 
       {message ? <div className="message-banner">{message}</div> : null}
 
       {loading ? (
-        <div className="empty-state">Loading the weekly billing engine...</div>
+        <div className="empty-state">Calculating runtime ledger...</div>
       ) : rows.length === 0 ? (
-        <div className="empty-state">No customers were returned for billing.</div>
+        <div className="empty-state">No customers found.</div>
       ) : (
         <div className="table-shell">
           <table className="data-table">
             <thead>
               <tr>
                 <th>Customer</th>
-                <th>Meal plan</th>
-                <th>Preference</th>
-                <th>Base plan cost</th>
-                <th>Carry-forward</th>
-                <th>Net payable</th>
-                <th>Amount paid</th>
-                <th>UPI reference</th>
+                <th>Total Top-ups</th>
+                <th>Total Eaten</th>
+                <th>Carry-over</th>
+                <th>Next Wk Base</th>
+                <th>Suggested Top-up</th>
+                <th>New Payment</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -173,46 +206,37 @@ export default function BillingDashboard() {
               {rows.map((customer) => (
                 <tr key={customer.id}>
                   <td>
-                    <strong>{customer.name}</strong>
+                    <strong>{customer.name}</strong><br/>
+                    <small style={{ color: 'rgba(226, 232, 240, 0.6)' }}>
+                      {formatPreference(customer.preference)}
+                    </small>
                   </td>
+                  <td>{formatCurrency(customer.lifetimeTopup)}</td>
+                  <td>{formatCurrency(customer.lifetimeEaten)}</td>
                   <td>
-                    <div className="chip-list">
-                      {customer.mealPlan.length ? (
-                          customer.mealPlan.map((meal) => <span className="chip" key={meal}>{MEAL_LABELS[meal] ?? meal}</span>)
-                      ) : (
-                        <span className="chip chip--muted">No plan</span>
-                      )}
-                    </div>
-                  </td>
-                  <td>{formatPreference(customer.preference)}</td>
-                  <td>{formatCurrency(customer.baseCost)}</td>
-                  <td>
-                    <span className={`status-chip ${toNumber(customer.credit_balance) >= 0 ? 'status-chip--success' : 'status-chip--warning'}`}>
-                      {formatCurrency(customer.credit_balance)}
+                    <span className={`status-chip ${customer.carryover >= 0 ? 'status-chip--success' : 'status-chip--warning'}`}>
+                      {formatCurrency(customer.carryover)}
                     </span>
                   </td>
+                  <td>{formatCurrency(customer.baseWeekPlan)}</td>
                   <td>
-                    <strong>{formatCurrency(customer.rawNetPayable)}</strong>
-                    <div className="table-note">
-                      {customer.rawNetPayable < 0 ? `Advance credit ${formatCurrency(Math.abs(customer.rawNetPayable))}` : `Due ${formatCurrency(customer.settlementDue)}`}
-                    </div>
+                    <strong>{formatCurrency(customer.suggestedTopup)}</strong>
                   </td>
-                  <td>
+                  <td style={{ display: 'flex', gap: '8px', minWidth: '220px' }}>
                     <input
                       className="form-input"
                       type="number"
                       min="0"
                       step="1"
-                      placeholder={String(customer.settlementDue || 0)}
+                      style={{ width: '100px' }}
+                      placeholder={String(customer.suggestedTopup || 0)}
                       value={paymentData[customer.id]?.amount ?? ''}
                       onChange={(event) => handleInputChange(customer.id, 'amount', event.target.value)}
                     />
-                  </td>
-                  <td>
                     <input
                       className="form-input"
                       type="text"
-                      placeholder="UPI ID or CASH"
+                      placeholder="UPI ID"
                       value={paymentData[customer.id]?.upi ?? ''}
                       onChange={(event) => handleInputChange(customer.id, 'upi', event.target.value)}
                     />

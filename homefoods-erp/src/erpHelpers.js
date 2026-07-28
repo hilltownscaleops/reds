@@ -9,6 +9,7 @@ export const MEAL_LABELS = {
 export const STATUS_LABELS = {
   active: 'Active',
   skipped: 'Skipped',
+  active_nv: 'Active NV',
   nv_downgraded: 'NV downgraded',
   inactive: 'Inactive',
 };
@@ -171,8 +172,9 @@ export function normalizeMealPlan(mealPlan) {
 export function formatPreference(preference) {
   const normalized = String(preference ?? '').trim().toLowerCase();
 
-  if (normalized.includes('non')) return 'Non-Veg';
+  // FIX: Check for 'premium' FIRST, otherwise 'non' catches it and exits early
   if (normalized.includes('premium')) return 'NV Premium';
+  if (normalized.includes('non')) return 'Non-Veg';
   return 'Veg';
 }
 
@@ -246,7 +248,8 @@ export function statusTone(status) {
   const normalized = String(status ?? '').toLowerCase();
 
   if (normalized === 'active') return 'success';
+  if (normalized === 'active_nv') return 'accent';
   if (normalized === 'skipped') return 'warning';
-  if (normalized === 'nv_downgraded') return 'accent';
+  if (normalized === 'nv_downgraded') return 'success';
   return 'muted';
 }

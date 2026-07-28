@@ -1,0 +1,2707 @@
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\App.css
+========================================
+.app-shell {
+  position: relative;
+  min-height: 100svh;
+  padding: 32px;
+  isolation: isolate;
+}
+
+.app-shell__glow {
+  position: fixed;
+  inset: auto;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(12px);
+  opacity: 0.9;
+}
+
+.app-shell__glow--one {
+  top: 0;
+  right: 0;
+  width: 28rem;
+  height: 28rem;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%);
+}
+
+.app-shell__glow--two {
+  left: -4rem;
+  bottom: 6rem;
+  width: 22rem;
+  height: 22rem;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.18), transparent 72%);
+}
+
+.hero-panel,
+.panel {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(12, 12, 16, 0.66);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+}
+
+.hero-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+  gap: 20px;
+  padding: 28px;
+  border-radius: 28px;
+}
+
+.hero-panel__copy h1,
+.panel__header h2,
+.customer-card h3 {
+  margin: 0;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.hero-panel__copy h1 {
+  margin-top: 10px;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  max-width: 12ch;
+}
+
+.hero-panel__copy p,
+.panel__header p,
+.customer-card__meta,
+.table-note,
+.tab-button small {
+  color: rgba(226, 232, 240, 0.76);
+}
+
+.hero-panel__copy p {
+  max-width: 58ch;
+  margin: 14px 0 0;
+  font-size: 1.04rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(251, 146, 60, 0.12);
+  color: #fdba74;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-panel__chips,
+.chip-list,
+.tab-strip {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hero-panel__chips {
+  margin-top: 18px;
+}
+
+.status-chip,
+.chip,
+.summary-card,
+.metric-card,
+.customer-card,
+.status-toggle,
+.action-button,
+.tab-button,
+.form-input,
+.field input {
+  border-radius: 18px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid transparent;
+  font-size: 0.88rem;
+}
+
+.status-chip--success {
+  background: rgba(34, 197, 94, 0.14);
+  color: #86efac;
+  border-color: rgba(134, 239, 172, 0.22);
+}
+
+.status-chip--warning {
+  background: rgba(249, 115, 22, 0.16);
+  color: #fdba74;
+  border-color: rgba(253, 186, 116, 0.22);
+}
+
+.status-chip--neutral {
+  background: rgba(148, 163, 184, 0.14);
+  color: #cbd5e1;
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.hero-panel__highlights {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.metric-card {
+  min-height: 96px;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.84), rgba(15, 23, 42, 0.92));
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.metric-card__label {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(226, 232, 240, 0.62);
+  font-size: 0.85rem;
+}
+
+.metric-card strong {
+  display: block;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+.tab-strip {
+  margin: 18px 0;
+}
+
+.tab-button {
+  flex: 1 1 220px;
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.7);
+  color: #e2e8f0;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.tab-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(251, 146, 60, 0.4);
+}
+
+.tab-button--active {
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.2), rgba(15, 23, 42, 0.96));
+  border-color: rgba(249, 115, 22, 0.44);
+}
+
+.tab-button span,
+.tab-button small {
+  display: block;
+}
+
+.tab-button span {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.tab-button small {
+  margin-top: 4px;
+  font-size: 0.82rem;
+}
+
+.workspace-shell {
+  padding-bottom: 32px;
+}
+
+.panel {
+  padding: 22px;
+  border-radius: 28px;
+}
+
+.panel__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.panel__header h2 {
+  margin-top: 10px;
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  min-width: 180px;
+  color: #cbd5e1;
+}
+
+.field span {
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.field input,
+.field select,
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.84);
+  color: #f8fafc;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+}
+
+.field input:focus,
+.form-input:focus {
+  outline: 2px solid rgba(249, 115, 22, 0.44);
+  outline-offset: 1px;
+}
+
+.summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-card {
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.summary-card span {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(226, 232, 240, 0.64);
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summary-card strong {
+  color: #f8fafc;
+  font-size: 1.05rem;
+}
+
+.message-banner,
+.empty-state {
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.72);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.message-banner {
+  color: #fde68a;
+}
+
+.empty-state {
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.calendar-panel,
+.day-roster-panel {
+  margin-bottom: 16px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.calendar-panel__header,
+.day-roster-panel__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.calendar-panel__header h3,
+.day-roster-panel__header h3 {
+  margin: 8px 0 0;
+  font-size: 1.15rem;
+}
+
+.calendar-panel__header p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.68);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.calendar-day {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  padding: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #e2e8f0;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.calendar-day:hover {
+  transform: translateY(-1px);
+  border-color: rgba(251, 146, 60, 0.34);
+}
+
+.calendar-day--selected {
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.18), rgba(15, 23, 42, 0.94));
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.calendar-day__label {
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.calendar-day strong {
+  font-size: 1.4rem;
+  color: #f8fafc;
+}
+
+.calendar-day__counts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: #fdba74;
+  font-size: 0.8rem;
+}
+
+.day-roster-panel__meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.day-roster-panel .table-shell {
+  margin-top: 6px;
+}
+
+.roster-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+
+.roster-action {
+  width: auto;
+  min-width: 140px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.92rem;
+}
+
+.roster-pool-panel {
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.roster-pool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.roster-pool-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.78);
+}
+
+.roster-pool-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.roster-pool-card p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.68);
+  font-size: 0.86rem;
+}
+
+.table-shell {
+  overflow-x: auto;
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1160px;
+  background: rgba(2, 6, 23, 0.5);
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  vertical-align: top;
+  text-align: left;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgba(15, 23, 42, 0.96);
+  color: #cbd5e1;
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(30, 41, 59, 0.48);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(249, 115, 22, 0.14);
+  border: 1px solid rgba(249, 115, 22, 0.24);
+  color: #fdba74;
+  font-size: 0.82rem;
+}
+
+.chip--muted {
+  background: rgba(148, 163, 184, 0.14);
+  border-color: rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+}
+
+.table-note {
+  margin-top: 8px;
+  font-size: 0.83rem;
+}
+
+.status-toggle,
+.action-button {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 160ms ease, opacity 160ms ease, border-color 160ms ease;
+}
+
+.status-toggle {
+  padding: 0.72rem 0.8rem;
+  background: rgba(15, 23, 42, 0.84);
+  color: #f8fafc;
+}
+
+.status-toggle:hover,
+.action-button:hover {
+  transform: translateY(-1px);
+}
+
+.status-toggle--success {
+  border-color: rgba(34, 197, 94, 0.24);
+}
+
+.status-toggle--warning {
+  border-color: rgba(249, 115, 22, 0.24);
+}
+
+.status-toggle--accent {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.status-toggle--muted {
+  border-color: rgba(148, 163, 184, 0.18);
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.action-button {
+  padding: 0.8rem 1rem;
+  border-color: rgba(249, 115, 22, 0.3);
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.92), rgba(234, 88, 12, 0.92));
+  color: #fff7ed;
+}
+
+.action-button:disabled,
+.status-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.customer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.customer-card {
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.76);
+}
+
+.customer-card--archived {
+  opacity: 0.72;
+  border-color: rgba(148, 163, 184, 0.08);
+  background: rgba(15, 23, 42, 0.56);
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.editor-panel {
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.editor-panel__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.editor-panel__header h3 {
+  margin: 8px 0 0;
+  font-size: 1.15rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-grid--customer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.checkbox-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.checkbox-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.7rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  color: #e2e8f0;
+}
+
+.checkbox-pill input {
+  accent-color: #f97316;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.customer-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  color: rgba(226, 232, 240, 0.78);
+}
+
+.customer-card__stack {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.customer-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.text-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fdba74;
+  cursor: pointer;
+}
+
+.text-button--danger {
+  color: #f87171;
+}
+
+.customer-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.customer-card h3 {
+  font-size: 1.2rem;
+}
+
+.customer-card p {
+  margin: 6px 0 0;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.customer-card__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.customer-card__meta dt {
+  color: rgba(226, 232, 240, 0.52);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.customer-card__meta dd {
+  margin: 4px 0 0;
+  color: #f8fafc;
+  font-size: 0.94rem;
+}
+
+@media (max-width: 1080px) {
+  .hero-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel__highlights,
+  .summary-strip,
+  .customer-card__meta,
+  .editor-grid,
+  .form-grid,
+  .form-grid--customer {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .calendar-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .roster-pool-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 16px;
+  }
+
+  .hero-panel,
+  .panel {
+    border-radius: 22px;
+    padding: 18px;
+  }
+
+  .hero-panel__highlights,
+  .summary-strip,
+  .customer-card__meta,
+  .editor-grid,
+  .form-grid,
+  .form-grid--customer {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .roster-pool-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-panel__header,
+  .day-roster-panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tab-button {
+    flex-basis: 100%;
+  }
+}
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\App.jsx
+========================================
+import { useState } from 'react';
+import './App.css';
+import DailyDashboard from './components/DailyDashboard';
+import BillingDashboard from './components/BillingDashboard';
+import CustomerList from './components/CustomerList';
+import { hasSupabaseConfig } from './supabaseClient';
+
+const tabs = [
+  {
+    id: 'daily',
+    label: 'Daily Operations',
+    description: 'Roster controls and live carry-forward updates.',
+  },
+  {
+    id: 'billing',
+    label: 'Weekly Billing',
+    description: 'Weekly dues, UPI settlement, and ledger entries.',
+  },
+  {
+    id: 'customers',
+    label: 'Customers',
+    description: 'Read-only profiles, meal plans, and credit state.',
+  },
+];
+
+const highlights = [
+  { label: 'Service window', value: 'Mon - Fri' },
+  { label: 'Meal slots', value: 'Breakfast, Lunch, Dinner' },
+  { label: 'NV surcharge', value: 'â‚¹25 per meal' },
+  { label: 'Ledger model', value: 'Supabase Postgres' },
+];
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('daily');
+
+  return (
+    <div className="app-shell">
+      <div className="app-shell__glow app-shell__glow--one" aria-hidden="true" />
+      <div className="app-shell__glow app-shell__glow--two" aria-hidden="true" />
+
+      <header className="hero-panel">
+        <div className="hero-panel__copy">
+          <span className="eyebrow">Homefoods ERP</span>
+          <h1>Operational control for meals, credits, and weekly billing.</h1>
+          <p>
+            Built around the weekly prepaid cycle, with daily roster toggles, carry-forward math, and
+            settlement logging against Supabase.
+          </p>
+
+          <div className="hero-panel__chips">
+            <span className={`status-chip ${hasSupabaseConfig ? 'status-chip--success' : 'status-chip--warning'}`}>
+              {hasSupabaseConfig ? 'Supabase connected' : 'Supabase env missing'}
+            </span>
+            <span className="status-chip status-chip--neutral">Database-driven math</span>
+          </div>
+        </div>
+
+        <div className="hero-panel__highlights">
+          {highlights.map((highlight) => (
+            <article className="metric-card" key={highlight.label}>
+              <span className="metric-card__label">{highlight.label}</span>
+              <strong>{highlight.value}</strong>
+            </article>
+          ))}
+        </div>
+      </header>
+
+      <nav className="tab-strip" aria-label="Homefoods ERP sections">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            className={`tab-button ${activeTab === tab.id ? 'tab-button--active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+            aria-selected={activeTab === tab.id}
+          >
+            <span>{tab.label}</span>
+            <small>{tab.description}</small>
+          </button>
+        ))}
+      </nav>
+
+      <main className="workspace-shell">
+        {activeTab === 'daily' && <DailyDashboard />}
+        {activeTab === 'billing' && <BillingDashboard />}
+        {activeTab === 'customers' && <CustomerList />}
+      </main>
+    </div>
+  );
+}
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\erpHelpers.js
+========================================
+export const MEAL_ORDER = ['breakfast', 'lunch', 'dinner'];
+
+export const MEAL_LABELS = {
+  breakfast: 'Breakfast',
+  lunch: 'Lunch',
+  dinner: 'Dinner',
+};
+
+export const STATUS_LABELS = {
+  active: 'Active',
+  skipped: 'Skipped',
+  nv_downgraded: 'NV downgraded',
+  inactive: 'Inactive',
+};
+
+export function toNumber(value, fallback = 0) {
+  const parsed = Number(value);
+
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+export function parseDate(value) {
+  if (!value) return null;
+
+  const datePart = String(value).slice(0, 10);
+  const [year, month, day] = datePart.split('-').map(Number);
+
+  if (!year || !month || !day) return null;
+
+  return new Date(year, month - 1, day);
+}
+
+export function formatDateInput(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return '';
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+export function addDays(date, count) {
+  const nextDate = new Date(date);
+  nextDate.setDate(nextDate.getDate() + count);
+  return nextDate;
+}
+
+export function isWeekend(date) {
+  const day = date.getDay();
+
+  return day === 0 || day === 6;
+}
+
+export function getMonday(date) {
+  const current = new Date(date);
+  const day = current.getDay();
+  const offset = day === 0 ? -6 : 1 - day;
+
+  current.setDate(current.getDate() + offset);
+  return current;
+}
+
+export function getFriday(date) {
+  return addDays(getMonday(date), 4);
+}
+
+export function getAutoFillWindow(referenceDate) {
+  const baseDate = referenceDate instanceof Date ? referenceDate : parseDate(referenceDate) ?? new Date();
+
+  if (isWeekend(baseDate)) {
+    const nextMonday = addDays(getMonday(baseDate), 7);
+
+    return {
+      start: nextMonday,
+      end: addDays(nextMonday, 4),
+    };
+  }
+
+  return {
+    start: getMonday(baseDate),
+    end: getFriday(baseDate),
+  };
+}
+
+export function getDefaultRosterDate(referenceDate) {
+  const baseDate = referenceDate instanceof Date ? referenceDate : parseDate(referenceDate) ?? new Date();
+
+  if (isWeekend(baseDate)) {
+    return formatDateInput(addDays(getMonday(baseDate), 7));
+  }
+
+  return formatDateInput(baseDate);
+}
+
+export function eachDateInRange(startDate, endDate) {
+  const dates = [];
+
+  if (!(startDate instanceof Date) || !(endDate instanceof Date) || Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return dates;
+  }
+
+  const current = new Date(startDate);
+
+  while (current <= endDate) {
+    dates.push(formatDateInput(current));
+    current.setDate(current.getDate() + 1);
+  }
+
+  return dates;
+}
+
+export function isSameCalendarDate(leftValue, rightValue) {
+  const leftDate = parseDate(leftValue);
+  const rightDate = parseDate(rightValue);
+
+  if (!(leftDate instanceof Date) || Number.isNaN(leftDate.getTime())) return false;
+  if (!(rightDate instanceof Date) || Number.isNaN(rightDate.getTime())) return false;
+
+  return formatDateInput(leftDate) === formatDateInput(rightDate);
+}
+
+export function isWithinCustomerWindow(customer, dateString) {
+  const rosterDate = parseDate(dateString);
+  const startDate = parseDate(customer?.start_date) ?? rosterDate;
+  const endDate = parseDate(customer?.end_date);
+
+  if (!(rosterDate instanceof Date) || Number.isNaN(rosterDate.getTime())) return false;
+
+  if (startDate && rosterDate < startDate) return false;
+  if (endDate && rosterDate > endDate) return false;
+
+  return true;
+}
+
+export function isArchivedCustomer(customer) {
+  if (!customer) return false;
+
+  if (typeof customer.is_archived === 'boolean') {
+    return customer.is_archived;
+  }
+
+  if (typeof customer.active === 'boolean') {
+    return !customer.active;
+  }
+
+  return Boolean(customer.archived_at);
+}
+
+export function formatCurrency(value) {
+  return `â‚¹${toNumber(value).toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+  })}`;
+}
+
+export function normalizeMealPlan(mealPlan) {
+  if (Array.isArray(mealPlan)) {
+    return mealPlan.map((meal) => String(meal).trim().toLowerCase()).filter(Boolean);
+  }
+
+  if (typeof mealPlan === 'string') {
+    return mealPlan
+      .split(',')
+      .map((meal) => meal.trim().toLowerCase())
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
+export function formatPreference(preference) {
+  const normalized = String(preference ?? '').trim().toLowerCase();
+
+  if (normalized.includes('non')) return 'Non-Veg';
+  if (normalized.includes('premium')) return 'NV Premium';
+  return 'Veg';
+}
+
+export function getMealPrice(settings, mealType) {
+  const priceMap = {
+    breakfast: settings?.base_breakfast ?? settings?.breakfast_price ?? settings?.base_meal ?? 0,
+    lunch: settings?.base_lunch ?? settings?.base_meal ?? settings?.base_breakfast ?? 0,
+    dinner: settings?.base_dinner ?? settings?.base_lunch ?? settings?.base_meal ?? 0,
+  };
+
+  return toNumber(priceMap[mealType]);
+}
+
+export function calculateBaseWeeklyCost(customer, settings) {
+  const plan = normalizeMealPlan(customer?.meal_plan);
+  const premium = toNumber(settings?.nv_premium);
+
+  const mealTotal = MEAL_ORDER.reduce((total, mealType) => {
+    if (!plan.includes(mealType)) return total;
+
+    return total + getMealPrice(settings, mealType) * 5;
+  }, 0);
+
+  const isNonVeg = String(customer?.preference ?? '').toLowerCase().includes('non');
+
+  return mealTotal + (isNonVeg ? premium * 2 : 0);
+}
+
+export function calculateNetPayable(customer, settings) {
+  return calculateBaseWeeklyCost(customer, settings) - toNumber(customer?.credit_balance);
+}
+
+export function defaultRosterRow(customerId, rosterDate, mealPlan) {
+  const plan = normalizeMealPlan(mealPlan);
+
+  return {
+    customer_id: customerId,
+    roster_date: rosterDate,
+    b_status: plan.includes('breakfast') ? 'active' : 'skipped',
+    l_status: plan.includes('lunch') ? 'active' : 'skipped',
+    d_status: plan.includes('dinner') ? 'active' : 'skipped',
+  };
+}
+
+export function buildRosterSeedRows(customer, referenceDate) {
+  const window = getAutoFillWindow(referenceDate);
+  const startDate = parseDate(customer?.start_date) ?? window.start;
+  const endDate = parseDate(customer?.end_date) ?? window.end;
+  const dateStart = startDate > window.start ? startDate : window.start;
+  const dateEnd = endDate < window.end ? endDate : window.end;
+
+  return eachDateInRange(dateStart, dateEnd)
+    .filter((rosterDate) => isWithinCustomerWindow(customer, rosterDate))
+    .map((rosterDate) => defaultRosterRow(customer.id, rosterDate, customer.meal_plan));
+}
+
+export function cycleMealStatus(currentStatus, mealColumn) {
+  const normalized = String(currentStatus ?? 'active').toLowerCase();
+
+  if (mealColumn === 'b_status') {
+    return normalized === 'active' ? 'skipped' : 'active';
+  }
+
+  const cycle = ['active', 'skipped', 'nv_downgraded'];
+  const currentIndex = cycle.indexOf(normalized);
+
+  return cycle[(currentIndex + 1) % cycle.length] ?? 'active';
+}
+
+export function statusTone(status) {
+  const normalized = String(status ?? '').toLowerCase();
+
+  if (normalized === 'active') return 'success';
+  if (normalized === 'skipped') return 'warning';
+  if (normalized === 'nv_downgraded') return 'accent';
+  return 'muted';
+}
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\index.css
+========================================
+:root {
+  color: #e2e8f0;
+  background:
+    radial-gradient(circle at top, rgba(251, 146, 60, 0.16), transparent 30%),
+    linear-gradient(180deg, #030712 0%, #0f172a 55%, #111827 100%);
+  color-scheme: dark;
+  font-family: 'Segoe UI Variable Display', 'Aptos', 'Trebuchet MS', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+dt {
+  font-weight: 700;
+}
+
+table {
+  border-spacing: 0;
+}
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\main.jsx
+========================================
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\supabaseClient.js
+========================================
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+export const hasSupabaseConfig = Boolean(supabaseUrl && supabaseAnonKey);
+
+function createOfflineBuilder(message) {
+	const response = {
+		data: null,
+		error: new Error(message),
+	};
+
+	const builder = {
+		select() {
+			return builder;
+		},
+		insert() {
+			return builder;
+		},
+		update() {
+			return builder;
+		},
+		upsert() {
+			return builder;
+		},
+		delete() {
+			return builder;
+		},
+		eq() {
+			return builder;
+		},
+		order() {
+			return builder;
+		},
+		single() {
+			return Promise.resolve(response);
+		},
+		maybeSingle() {
+			return Promise.resolve(response);
+		},
+		then(resolve, reject) {
+			return Promise.resolve(response).then(resolve, reject);
+		},
+		catch(reject) {
+			return Promise.resolve(response).catch(reject);
+		},
+		finally(callback) {
+			return Promise.resolve(response).finally(callback);
+		},
+	};
+
+	return builder;
+}
+
+const offlineSupabase = {
+	from() {
+		return createOfflineBuilder('Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to connect Homefoods ERP to Supabase.');
+	},
+	rpc() {
+		return Promise.resolve({
+			data: null,
+			error: new Error('Supabase is not configured.'),
+		});
+	},
+};
+
+export const supabase = hasSupabaseConfig ? createClient(supabaseUrl, supabaseAnonKey) : offlineSupabase;
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\assets\hero.png
+========================================
+‰PNG
+
+   
+IHDR  W  i   Ÿ›÷  úPLTE   éèì~v†~v†pdu­¨±ÙÖİæäëdZl—¢}uƒ‡•~v…½¹Áâİê†ÉÆÍ~v…†“w†\Í€x‡ÔÎÚ~w…º¶¾»¶ÀÈÆÌQº}v„~v†´°¸VÅ~v…‰•x‡FæÜÖä…R»¿¡âTNZ…~ŒÑÂäg^p|u„OHU€x‡IYQ^•›¦¡«·å|v…Ë±è}v…Zµ|ï€x‡xC±Ÿ™¤€xˆ—aÔ°é\-gâªmë|ÄŠƒ‘f4›}u…BLEQœ—¢q5¼a½hài×HÇŸcâ§kêV(“XÒr!Ü¯oõ}.åm7°MåOª_æ£tÛ´}ñ–[Ôo3¸©‹ÇqéVÃY%©oãQQ±s0ÒfáŒ…’E–@9FXÀJ‡h,Ã¤häpEŸ„H¿:	‡BšO²Š<å=
+‡œ_Ú‹5ò«rèŒOÈÂ†ùd\j~:Ég`mÃ‹õ8	ƒH½:	‡w‡4{ŒOÇ~F¶§mçŠPÂ>
+‘=
+Œ’TÏSÈ@„—[æ‰LÄ‡M¾‚I¸}v…QÌ4
+u¨mí±wñ™]Ğx>·{E±•YÎ“Wáw?±ˆKÜ˜[Õv@«;|q7µ gåœaå¤iŞ„BÛG—A–Nâ”UÓ0p}?Ô…JÂ~B½_×[(š˜_ß®tèv:»RÜ¡fë“YÉ¡eØd-¨j5¢Dp<¥L“­rğŒIèTÃp9¬v1Úa-Ÿ½…ò^ì™ZÛS šU%K‰•Dì‘QæmäfÜL§eòC›?å bŞŒOÔ_ÔT­X"£ÃŒõ|>ÅcÑe4™’VÚk2°k5©J§ªoâ…Dâ„DÎDÆ”Ué…Nºtè:à]%®P£«kó¹}öv9Î„IÕF¡›Pî¶}ëL
+°,gG~‡JÉ_!¼¡[óg,ºÉ”÷±röŒMÌ¦cçp/Ï}+éh'Éu7Ã{ón1Ãi Ô°«µääæ¬0¡B   |tRNS ½p# ¥‘T°;Ã©ÃşÀ*`YJAşCßdşï¡¸ ¨S#·20À>Ÿ ˜|cŸAÊãß»‡ŒsşïŒ|uÉo^Y_]–„á´?ŞÙ¤?ÌÇ®œ„}dƒkecÛ¢8çÅÂ¬sãÜ×À¸á»ŞÀ¾åİĞ¢ÀØøåÃ²}4  /:IDATxÚìÜ[®›0àa¸	!ŠDH‰À:m¬HTQ%”¾f_Şknİ›µ‡ Ä6ştV`EÿñŒg Ã0Ã0c±œS–Ù«óùr¾ØöŒ‘Âlõ¹äˆÉ6¸ßş®u‚¬-ÓUvc'»”œÖnüÑ‚?­½ü –4ÁxøPSõÑƒ÷xÇ[–ñ Ç.i[ĞÍÚDXœÍöSÅÀƒ>Ş\äæd{ŸêÕƒ¾,¹mnÿE¼îàë
+“³İHŠÉ•WØ˜0xŸó…'{b­‰Ù÷ˆWã»XÚ`ü3Xë7î-21û·‰`'ÚÔ„Áıİª¥GÍ?"¿˜“ıíV²`
+“pMüB#¦²‰¨9ÙïÁJ“=Lé°5¥­(Z]˜˜(mW‹>Ù¬Ä`Óó¯KY’ÒjÏ±‰°Yæ“‚sáIÏ³O–³"X?ùğT.ãK+mIOa³¤˜=¥üCsØDøy)aà¬8îa.1[HÌŞJ`F¾‹…ş1K
+Zí`^^¥{Ì†)O0¿|ÛR}ÃÀ±[<Zğ
+ÖQß‡š[‰×5¼Š¥i‘¤tt7p|iK@/a‚I¯vˆôºsıèJ`-†c´9Ù¬Áà
+äà×ºÄ,I1Ù€<6[,Ôï :şáõÁz/V~Ñ±K€t|•î ’†]=‘U©ûj{ú>Â"«|«fÑYqz™)³¢hµ@n–K‹¨„|ÆH–k—R£Ş?FXÔ+3#ŠV¹ƒõïª1ƒ(FXä¼[½Çÿ$ÿ‹0}ÕˆÒVæbxn•	Ö{±ÄÄïİ@ÙïV1ÛÊ¹^G*iÑªr‘¤4ÉAm"få
+gÅ%xfoO¥zµ›Â>è@¦õ:RĞzºXWLŠ˜
+S&q7pˆMõúõ:gÅU*Zû±^¾Å|+i êµ‹åbsƒWİ@•o¬]v[ö¢Ä0ÕãnÕ1ƒø@Ÿk¡İÀ!|—µ_B˜UVRÅºƒ|¢³†˜
+ÔçÆÚ%¯æë †—Vë`ık½®;fZh“Š5K‘òÌÎÅÚ>{ïƒH=Âò/*tEÑªæ3Ëx{ÄgÅ¬œ³³yR‘ú­ıxO	STş™eŠ˜å“®×9v«{ÑÚõó]:,´ÉÅw§*m	cÕ²ƒõ^MQÚ†”.¨híçµ—pô÷Ã¥Xh“‹?r½.+T›
+œ‹¥E6¼¸•i¡M."fOƒÚT
+œK<ä]¢¨ãKëä1ûhÑZ›`ı??bÍ	z»µÌD@?1íÿ“=óÊ”W}ùQKèÁa<2Éú•½³Ùmˆ¢ğuâŸ8×ì8¨Xu©¡%²Å[Ä›D¼b3o0O2D@€Oœ´›.`Ó«éñ¹çÎÏAû‘¤°ïevMã«°R`TÖ­ÖÃp2Éj€ì]ÛXğxfuKz^«.8¿·&-c¹èT “¨[®ğÕ‚4˜º6ÃJSÿÕ¢ÓÁéQGV²¯5¯!u4a#ßkëÚ­×f¸J[WPG‚šõÚëb×&Ü,jêªº¡v|)ßéëÚ	A2U£¯Jv“‚ÃMe|•A—¾Šá©¯5uµóhE‡6_¿©šº’×E/bMCƒ”ö»%gd„çqÇxk°Xè¡¯«Š‰Œ-[u!,Œ[n‰È©ñYvõÃİÆ,;cyõÓP@]éU§)›O¨ÂzÿjïœCÎÃ®óªc”.í¨Y¯3ÚaoYÖ‰;daLDÈzUñŸ§j®ë€ña8n¹{˜×F*Ú{‘ã“ôxJ;€ï–´ÿ:#.¼NşÅ˜{³_)Y×ì3òXÖ¾‹rŸ{ÃB›è ºÚô7“-³:™ı‘³?„××±ŠßÉì/	àı‹ƒ­×}—wkw
+†¹1íù,û±“Ìe·‡›l—=Öàö¯û$ó«÷\V9Oè1¸NÆJóçóŞ5·¶~ rÍ@6bô8*Õµ!Ë®õr;cÚ#­±Òİ¿iŞ¹¤¡’Ù«ŒfoÜ*·Ò‘Ë[Òğå³CZüklmÓğI÷ùÓ==ÎÇÏiíõg<»®Qx•¤g}ÑÖ•|V+5Ş5%ˆ¶Ç¶3ªc{7¬;³ÜñöZDÃeÈ©v‹÷©VXÈ]ˆÅUÈl2)bÁDDzÌûÁ‚'„T6ºx1˜Ì…k#eå¯‡Uåtß­O¦YD9Œ¶evÉ—ëÚ›Ò³	-+½Õ|·ª5ÉŠĞÀnö^®äl`ÿQ¬‡´««n½şˆµ¸O˜\èEI•"¼ñx`Õ®×ƒŸ÷eD^Œ¿DÏ{Ìavßíú×‡KìªWabÀ.ì\½½a¶VR¡ÃÃo'çØ” á‹K’Ùt1÷±Œ{.ŠÛF·’)‹¯¬èb®„J~4­ öJT r¿çÂ>¬EèÀ,d±SÎÎJğKW(fÒ,ï5>kÿáRğ»8
+Ûÿ²‘±©Ò@„d.÷ŸèBüëÃˆŸ0™íµ{ö¢V¾wS)Z×}ÆkÉ¬cY{/á÷ƒÒu vÅ]ÿ•[êôõíàwêñf’[› Æ+æÙX+$$3ÿ[¹e“÷¡En@2ëµQ·|PXUtK§c¸–ØÚŠ^Ú²X€Â‡âä¯×&³FµÊs½
+vy°]	«I ˜¾î0û2Å d­yBÂŞ0ï
+!¤\{İëò­©Í]Lmk[`«ïµãZnÇšÎ}4àŠnI[¹eÓºV9—
+11°xÄ*
+40aîÆ¤å¨«64àaUvuî›câM5Â
+®×û‡é–xk[ñ’¶Ëæ`!iàòÁ<ú}CQøÔò1íÍ“#Ó@<A”˜•r,q–¯uøÓÀİ@à™¨DìRã›ğüZÛ™W®lLX£šÖÆş|P3uÏ©µ5\6‡›ÖÅ`şdX(M‚x¶ÇëÒO	a4Öˆ°â>omæf)Îäx]Õ´Ş€Â
+6­x]qúŠ¯Ğ©­÷òn6v«½ùnÌrL]±)Íñ2ûÒËÙ0Ğœøs¾8Ô[™÷&’ákåM0ÏÅ_4AL‘‚ÃC¾¾¥—güMİèÅZÛQPbiàÍOa=Ì¾ó‹Ñ–e3z~ì
+:‡O¹‚Ÿ2mî_ñAä©yBöü2káM+n›VÎÔ~ÕMŸC–èæşÌ|'ÃòøÙØÂø¬®¸ÌŠëÃò[[;ğŞ@u„°Ş£um2µ@™
+Ë=7ø¾ÛÂò$u5—Ç=6+yşÏÒÚ&=:Vq¤·,t$úq‚‡j€ÁùñÚtÒúÎ›şëÂ#„YV>ih`{åÒ{'ç’‡c­ó\¹ƒÉìÓ½ùilJTX‰¦Íy ü+’ `‚øT2›À{= iı+^×æ2[Àóğ'ƒI NZc·hÔ´bûŞğºâôeäb9×¶ôb:%¶h#K¨wUU[³^w[½1õœ„§#gAz«L¯ë`pB­^KoŠÁÔwN5i,pxÈ×c:ƒS”om1õtÜâ$ã„QÆÜK£sI¿“w6½IDQ>å2|´ÎíÀ”¡Ó&¸€ lp â$U2:©A‹	±Ú)"ÂFMXËÊ­+ÿÿ…]»céO0Äw4jı`<Ì;-ò¬š’¶é»x8÷3ŒVÉ(½œpeú°¸…İ
+dmà"ã\¨Á6ˆ!)˜6P/¤m`0ı«÷QAŞ^’Å·±ÂÂõ¾…Ï•_³÷<¯;ˆ9ìn`”­°|ëâçêmUôíuFtşTÙ•V9.ŒPw
+óçŠßÓäk_»4ˆœĞ•	U±w
+sÜwÙÓæ›‘ËU[èb»Ø6m±ÁÅåÎ‘YSÛAD~dÕš¼‚¿ÿyh­’[¦ùş.ïYŸîR€ CZœ]9ø6 S•×IB~hšY8DÆš
+ën¾a“¤Œ¼S…-ÎJš[ö™õs….U-¹kSp¨™ÓdYr¾o=ê•ÿ¡ÆƒZ9©†I×şPÕ3FèÜ'Täe[ùñ³×ÌÉ àxß+SÀ‘Uƒ_`šİA—SZ&®ª¡ucG’6åMY–¤òÚzè\ÁÈ(€%£}ådÌÃ‰ùp±s}hYL¬¿£uQŠjº,•ãq#iÄãå²¼Uœ¯àJ×)üJ~8meÍõâ?ÅÚ³ZÍ€2ÍnADÖvmí/ö>àĞ,bÃU$¥ŞÔ¬Ít§Jj ¶ÂbÏğÓ¬y6[Ynÿ²Nª¢732URŸı'ò-³±pÓ¬#VGîÉª²ÀdõïbuIvÒ)A ÄÂşˆuÚº„Ÿ@ÍFŒÔI±Î”Át/Dr«>ÌÙ#VE[MFA ;	¢z—mƒ˜X®¼bX×(`q4~#¯ïş.V7ÍšÍ³ŸëÍï‡V4u’ÁO”BÚ¦€§6œt²‚s
+_äëQ#sÂ¶IÅ?±ÆÓöœ¿-êh8	ÛÓd
+7jàÅöíaë’#Ö¹¡Ã3Ü îıåĞŠ×lÚiV.8m ò/Æ­,œAš¦õ¢@4ˆHŠÉ´¯TÌ1bš
+x~ÍöÆf…SŒö.×j¡¯Ú\š¦×\ÉáÛ|x Ü(ÄeSÓ'ÅA·ïU³a–"Wm ?Î…ošİ,8‡V~ò-Ös‰Èu5ÆÑòCmâa.ÂÄª/Ğƒãıo®ü~Íöp³^³êœ{ÆÑ“m ?Ñ«Ûı¶¿ÆüœX­ãû€´G •TR_ÉÎwOµ›m[Ç.‡VÍV‘£g©æÀo*ƒíı,œÍŞ˜µbĞI¢ ÁH¦ÀR¥  zuƒ£Aäñk¶3ab‡V'jjG%ª—	b+Q„Ó ¶}ókx5†¾Ìr‚PVX´$¡;ò––ûùİÜÖ¦d¨)Bê:‘ä[ÛıG€…%‡x×Š‡*u›Ñèu5‘P«)5•b_b×õˆ§ÖİŞ/áû,×WQb=nT 8h¤¨èõ¯èº®hQ
+zuûüS?rÅ
+ølÖ`Y ‡º7‚Øl{ğ©{g©,Ÿ||VÁ4ûÇEX.V®¿ı°/4ÙÒóA–zëÕ³§Âæ×Ë6º÷a9¹tøòY›còÏ~µmöo/ÊS	?ü¸_Âğ©?zşnéÄú»Ş³d1Éá_-uº‡Ë(Ö/ìİ¿kSQğëäV‚ oxƒ>¡K! •:h
+Qj•ÖÔD$†â/Ä©8íæ!"—"¸¼¸ôdPi#c‘G#·-Ş—B‡ÒåñÚ¸ˆ“•Ö“¼§ƒÒóù¾\¾9çŞ6ùÕ€Õ¼;09|bÍæÏ2ò£š†Ù_2™LZ»v‰gÊgæº<º3z’‘Ÿ5ûxöÖ™?ÿ‡¶´´öçpz™¹-wW±FÎ_9PKkN¦šÙ(–ëå|d„Šu_q³1İ“ì®‰ÕLÒlõûD3{+Äy=3flÄù½™õüäŞ‰»n˜#T¬=j¹h°{+£@ÅÚÛÀ©Ä» ÓuÃ8¨÷VAÉ%³ş\4òtXûvn4í/Ö5k §
+C7úy¿j=¤Xn	ç£½»ÕÌS¬[Ìa¸hÖ ] ¨C¹õ1†›2ÒŒ58WÆ+öøf„F¦gî1ÌØ‡#Á
+–
+´aowè
+;”¬9‰İb¿İ:ÊH—ZSØw]muş¥_zıŒ·nboYÊ5œs-ìƒkøíåÊxóögØe³B±fĞóê,Ñ¶JvÍµİ¹ÀHpGæŒQ¬æA¾4rh®¯ß[Œ5P6¿á¹Ö—S´q–ŠD<,×k¥Wízú#ÄFĞóZ*¾vb4Ão¶@Á}ì± íÖ^.×§)Ø âå€ïcçu²ëVç§;ÍHŸÎ–
+P
+š«ïºuGtë©	Fú1X(o øø÷±\bÛÙ†ÍjÊ:ÆHOWÍr‡Kåùà¥±~]Ür‡Ú6(o»šŠÓ»l§’æ¦-µíy ö#,×–éK«Í•í¸‰	úüBD¾ùZH%(Ùa÷niUKO	O—jÖFö7`åà¯pÊXAsm¶<·8¿Ò|àv-1Mï2ûšÈ|Ú®„Ojğìšëœ	Oª¥ÏJpƒT•WÏq*ƒ=N¦3K])uWƒ²W¢k»	,×YókÕuß<—œ+­”ºX‹ÑÌõ«£V¦£´-ø—¾Ô@®>I£¹n4¶İ¡öGíqOr^‘¢²ò"fÑš°ËxaIki[€¼Ë+JJY|šCûuÆ„juş¥”bÍ×Vì5±]KYTßÙ;—X¢8Œ³agÕØtaá‘ØXˆ©XI!^‰•HDb#™NêV[Âp8s\3c8L‡cÎ Í¹ÓzÜi¨Öå¶£CŠ ^Çcİx¬ÜëŸ4Ó.šI~ùòïÎÌ9?kÊÂ‡‰ÁcÀû‚®‡øéƒÂR0>g­¸
+éV³?/›†¾ıA'^èb/œ1õæúV#–,2êø)Öº÷^çê3¼ã©îAç}G®GR×#Oï›;+c€<õŒ  .9XçüŸ—[´çô==à`¹¯êF`pGà­A¾çK§õ­•¢p¤x>oBË Ø )„$`˜tßÔÙC|‰fòúç3›©!T0°çá§…À0Bÿ`Ğ³¶ã¸•8mšruóSlpg%p°°P¨½’§N>lÈÖÄéëëŠìt¿òCáz€¸WrÀ\|Æ@(Ÿouæz]|V~Z­î4Á„»‡nx˜!T`¨Ö×#Ã9C5ÍŠ-ñüÕœß†ñé!˜
+¤PàãP6^Jtâ:éˆ(òÖ jn©{½BDÀ>¶ıSqG®7†dæ>yÉµÓ=&<“;ßE0À.áºó01¸ò°Ç²Ö˜tÇíÖ
+	1ZTfÄM†=z¡áà2j,ÌîÌ]È)õ9‹‡\k;%vËß\­ÊÊ™Üæ·5"@ğÀ Òqhè!&¡Ùó&šèøêÆÊ”J•?:p{€¹^
+„‚ P„Hˆ4º€ù¼³76eHÙì”%±×7Œjwşí™¹ŒÆ0±‡ÃâNà\tN$½¶ó6‡¿A[†NÍC¸€]L\Ì4
+h÷`¿»ïgN.0dÈ›Ü¥¶K_üùjÎ¹ãlµ‘íyQtyAˆ1öÏ‘Û@GÁ^O¥Ÿ5³²“
+b:qíjˆQÌè‹[¦UÍgô68½dhd®á“cŒRóÓƒ£;{äĞzµ_c„!¬» ¬„@'ØÀä<ÿŒËµs­Å»EcgÜÇ€Ëy5€Æ\æ»É£¾¢8=;Ø—OÔØ¢!ğ˜Á”i§ëåR±ØÔ·fgÈ¦ÒïCŒ†.Aàñ+ÍÊ‘
+Ü];×¤
+éÔ˜/İÙx#dˆbj»5W•4ßõiïí~K±úóÇß*—
+ïölô´.xñz$Rl6ı}0'[œ½GYÈBàÀwJÔä-î¿ önVßBöM¨®}Np)½©˜0—?`4‹Åò—°+6˜3×ˆ™]·o
+×[¥r±Ùnôğ4 Tœî“ª
+­ÕO÷™K¼€€lÏ‡å¿´ùÀºTÄØ·×(ği€˜F¹h¼j›{ÌÆQÓ¹OÚÍb$}Ô›>hÉN¿ãL:Jµ"åbñJÂ;°¡¼:M}€Äëcv}.·lcı%°«¢ínË( ¶m#íqõÚØàäQhõ+æÔşT*—£w¯?ÔbƒsqÂø.yÛî” )•¹ñü§ïìJRÊUf«Ô€aLCÉ5sı„²bC¶2µÀ¶©o« ôÚ’­"õÜ^Ó²é?hËåÈİ” |<×5øÖÃÇÍºùr"%$bkL©Ôl³-°jİ1Íã‡hRU‘«Ê ÀÕX=éwN}ÙèÀô &Ù°{¤IôĞ«Fİ2åS¤]*s÷™ g™A¶P3ròø­—Äİ	áX"u$-•›íl·ï(õÍ{{¹P5MeHI
+€À=°ôwÏÕÜ·j6wU	iRòšªîÑTé´oYw*p7Ør)ÒŠ
+B:‘¾‰g
+¦Iƒ	]§rÛv{!r¹&´¾Å¬ÂiÆåLæ4÷ ÉFÓ4ÎÆFê´ù¿¿ƒŞ²·*ĞT@$õÑ$ÿªÑä©W<À¸{¾X,•¢Ï„”˜Ò»VÌ$
+Ø”©Såm‰Ä.×İüólÌ˜b±ì7¥Q¹Ó×GUUMÚª­JuµÕcÿìl½E5.ús6'ûä¤½ÇŞ#ì{«T,Ó<úü›Á¹›úNVÜ}õR~ÎäA0€›Öe¾<öâX‚—(ŠÇ„V«Ü,¶Q¯MEiï³©´ç µ%¨Ò¼¹|Ÿ¹ó´Ş’¤ÖhRJS÷Ğ{G­VŞöx‚Dï¦ÓiáH"!ˆâÁ™Åÿº_Üe^Jp¨Ç‰/8Ùt*}7òÍÀÜK©˜‡’*U5Õ¶9ôw»a.G9ÔCjòÜIÉ–öœì½ó±­ø[ÒŠ´xI§9X1½[¸Ù½hñ?İÚNß}áUAà—„RÏÊeÎU•Íz]©ÄoïW%ÛÖh/MÆæÿí!æ_©;³‚8óÂ›§—>ôÁ‘xñ "‘8#Dqß„!ñ “5#ÄXuO³¬së[·¦èZt©`©³ÈjK#îãÅoı‰£¾ívÚ·é7“Ï|¿İv{4ÛÃÌÕµÆ†LæúõÔòÛ4X°–…tK'ºÎÂw¶ûû\]‡í»ëÚœ#ø.¶nS¤#ø‰$¤¬K+R¥L¦T:²cÿZóğ¶íœ9?AÀ/`vãÁ¬ùvÇ5`àÜNß)§S×<Ö´¢fY!jÙ˜ÔÌÈ]º¿O×ÿ³zNÅÛU½l›#xb`RKjàë¶©ôƒ4[fv›a<ß¶è'®ş"‡4¸PŠw®
+÷?^ÖŠÉÈ'Ù”À0‚ƒÈ½ëÆı§Zö™yeÛT· ¼®ÛŞéT_¡9prËÒÓÇ3™ô»×ó`Öø]ê9d­³-»Ã¼Wİ_Ş;×­/?Ö’QhJ|Ÿ#X¹Ô×%gw÷÷Ÿ`»ßÉ‰ØR +şW‚tŒˆÕ
+²N®xğ U:Vzí<7
+g1¸úÕnñólÖ0êµ×åÍ©»k¶?yü¸¨…a€Ç0b^-ŠÓWúüO™«UŸÁ™†Â6Ç¨ûkÇ[&Ô¯iH¯[Ò‡î~¾³óhÕ1 ¬¿[íç8çn>wª¯ËĞƒ}píä—Ë—“Iİ'ÛB(Š“E­JÙèş¿ôfÛöé³óÅî7œƒ•\ç6ä+ >×‰U«iÚã'WAIP.?ØqoÈŸù±{—!;î9Õë¥t&“ºõğcj5_p¼ub„}‹èf„Qò|‡ÿEší2âÒ	ÿá©À³”X”c›:GuHå8²¢¤ãu÷¾}Çevßø3W­ŞÛ_*¥?—6ºú­ AïEÇùcà¼x¥1¤P¢¸go‡±MŸ¹ºöyò!À‰ƒ‡j¶‡ğÓ®ÿãİÕB­øøñ¥Sû”¯Ş3øOŞ÷´ıbçèær¦\Ş½íêX°5+$†<!ÔÂ@%dù4*$ƒ§š¼´mÛ}ÌjÆÄò5*l‡WT‡aë„à0L/ŸY¹%Ê¼9¼ÅŸU»!×>?Ø•Ù»ÿb¡„h„€­ñ)<,b¡–ô©wwuæ…A›ß¤m¢EèÃşD0d[:ç\-Å˜ú˜0¡O¶ïM=X2¹ÅŸ×ø%/Ê¥MG¡E A)ù8®â²Ï'èGâ²±•(jÀ}wY‡fu¶ïìWÇ]W„	?<i|RBp„D`ëHbìûµd¢ğñ¥q;5¡[‹¿¡n=JŸÓ¶_½\,|	ÁpP‹†ñ aJ=Biâ["¢¡"7VwhFtì7ûÀ½Oõ8yhW XK¦0çÀV_§z¼f	¤¬ÂÇ‡·ºXÿ’Úu(-_{õq1YLø¾e!ì¡
+`€º”5èzKŸHåŞ]×t—zwš;ûîk£ºKÚªQíöõ„b±(C‚ëu ë#lY?0 İÀ¿©‹èÁ’‰P…à©h%>¢²ÒO’Vô|"¤%¹¸»¼©2Wë³¤î=¨fßH¦‚08c\ò„bœ)Á„C” Ê‰Z¡÷¤[ã‡À‚…D@,ß£¡gI*Å’z¡¤+©%Hhy\2.lÖ<—zwy`ıÚµÎÎªsŒñŠF¼û[ÎHQ·Uœ	¡B(ÀXç~˜,‚Äú×Õn*$­dE’„¡"PŒÂ PÉ ù%ˆ°¢ŠÙÂU¹üÒ&A×ƒË;Ló­±Ù<÷µÎıD ÷lo0›Ál[q°h€"¿6cZ‹£vbc-	Îr†#,)õU©È aKS¡D.Ìîİõş}iÛvìô]÷ªUgmvÇge…)¯ÁÛJ]€ã‚ÕaTy„£ùàê?ÓäY‰"Ø“EO!ÏÃJ\)8=ÊĞ“Â÷å_øç?¯ë;¥|ûsÓ„Òõ7Ë’y òéÚKÅêuğÔv+Å(œåàÖeÿTfê2BI…= ¦…/•tYNÜù¼ëèÕï_şqÌÄ~gß6ÏUÏ™Ù·æf³ºOpÕ Ş“Û{$cLåçŠ»B—*r4¸úÕy´¬
+bÈb’¨Šô(‚o®æ|#ï2—‰{uâŸïÔ}ètÙy~îÜóçkŸ™×s¥Ü«à“w¾a‹\<?æÂW$çMkÑê<Û£ì)¥âI¥„×¸x$h°§®›Ë	‘«³<uãÕ«Ùÿââ˜6c§ß¹³³¼Û¨Ş»išW™ÛÏ½oğ\(yø}ƒå… t¹.—@-7ÜlõŸï1%¸.] AğÔcŞÓÆåoÅêOås7Ø±n.Ÿ?ï÷÷ÿ9¦Ë¨òÉ«;w®|ÿüÜÍª™½òÖØ~îÂS!>5*ßVnl¸‚ß€y*!˜È-œùïğzówyˆÃxœ\''qAº¼‚XÔEAÿ§Ny§6Dh”–bÕ£U¸¾Ü+ÍÅŞ]…†(¹Mğz×
+-Ä4–¾Vêâ7Nêl¥ï#ã“'Ÿ'îû;f>`ı®šhièŞÇØp[ƒaFDÄPÄÿóóñgŞÕ+ïÎ¼á8ÎÄg÷\ç†Š«vçeJ‹ò}È*!7fÖKG/ø[[½j¯jøÀM(¿ª5BbÁYAF\„3<™ûãu0ÓúÈ«{¯ò|…Ö2g®Ù)š5©ßgµGË†°×’¤¼um=Àú§®\.ôªU_ÿ
+­ŒØqÏOê
+Gi^$"š.ââÆÿùšİsìb§Ññ¼
+øº™ÚêŒfCwäšEë~Y/´ÿdó+ ø¡Y°şÙ-©µV±2‰¿Ù¾– URÆLÆ
+(ÇˆGàkånìË¬\‡/¾Oç]0vü|n:Nß1‡®ë¼îç‚ixğ¯o/ƒ‡_&r½Àú'®èØXjÆÛµ®*B8sÀJ„\Pf¯­ú@òñ‹g^Ö¿¯•4°µíI¿ï8fÑ6Æ“‘eˆdG.óE	É®XÿÆ¬bJIdÏ†¼.4K"E‚#Æ1Er‹"
+œ-¬³GNœã¸;{ã¥ªÍóØ:2]w˜¯™›*bqÂwƒ«‚åÖ¬jã²¯E$[ìÄ2Vü„pRŠ  [Ûœ>€{´ù=Šn¬jk»÷TÖ
+¼4İíô–w§hNÀØÄÕ5³¦r¡âñºQàüjf7hãroÉ„\|ŠU"¥bS!B„Ã6jñ6¾Å) SŠ-Î¯eWrìèp¶Õ´0N>ÛOGónZ[ã` ğ:s§æİ7“¦DdIÔf'IÄƒõoÈ¥’K;‘J+É0âA³YMSkÑ¥!,xˆ¿ãŠV€Ù‡Ú'q€p=±?=›Ì=¯Û­<9_imÍ¦3ç=Ej‡%ÛùïÙs™İ££g$øú9Q
++à6GÀTTâ”?|Åy«4°R³-4°š<Ê]ú§?
+öŸÎ¾¢ã@°¥½ã:n·‰›ı×éÈ3İ„Bm‘ÊüìFfwiãzê+S‹À² £%Ô~HÛ<|UBaû‹¢a
+$hZ‚ÿKÌ^ÊµÂ 9 Õ”É[oèŒÁVo¼=ù
+
+§Óéd>é'‘Ÿ¨
+Ì]ì:ıäæÜ]Ã0î¤“‚³èè~@ÒEAPáxCguvÊXè!iÖ¤ùÚ/`i>[£âÇG5ôBi‡€’l(­%gµÖáàä'¼;Ø>ÿAü¾'—÷½üêÍ§·ï‡ï^v›$½í»(ª¢Û¼|¾†áĞ
+Ÿ£°v2³ç¹z Ó¬Y†åÙÍğéÓjõ3ImíÅ[ƒ9Äµ ¾:ó“êÛ³ÿw·úöŸy÷şİöpØ5à²	o#QŸ§„€³¡‡ŠaD–å†×íş“Îµ÷ ZÓÈ³F‹ãn?ë¶z÷ÀÙè
+¾6ğõ£3¹Ó$ÛëËÖoß ¾ß~Z ø6Ï†)A:¡>bÁ\)6"#uw:5º™¿}´İy<c[ÚÈ%†âaLëŞ›xRø’W§•æµàŒgñ¸ßøX²™eë·˜…À6Cß&MÆÆHõ}ÅöQ¤#Lí&Vr8çµ†°œ§Ú\ÿ»5—2Œ­•`'g`%6Q¬i54À×^ïá|>L>fñ¬Ğ¼@—¥[}W-dúQÊˆ*òuùCj9=b“…Á™‡
+àáææ¦g¯Ÿÿcì^Ëè‰[‚aà‘%	²‘©X^6pÒ¸ö'[ƒø
+x[í´-¿EØ&¢—
+ Dåå©è‹fÄG·”+Ø˜B`ŸõyÑ¹ƒ»ş¬[­SÓz4r…ÒıQ”à„WZÚ3g§õ5Ì°à«Çø…e5túfA<İĞ)DVRuNÊ™ºN+¦›TìE”LK‚0‹Asİ#¿Ù]Ç×$–cSx´K£ ‰8åQ„ï÷Çƒ¸j|ÁÀd<=ûxdÇêèØºÈKºHxúQ¿XÁüFH‘‘(fä>´×
+ÜSöıîÜ…jŠX£z °âcS³&Ê´ÍÂVœö×´e¯€sKØX ı©*q:Ö%N"”—²ZqC”óE.W–97ĞÚ÷ã±p{Q©È•ßÚ=}ğğ‰¼ş$k&$µµ@{¦Ü7²ÈÕ´ÙdĞK•¶9øzeUğfP*³ºOUÄ0”e9ÏŠy¶ò€]˜·\ˆ™p¿­İqµJyÁÑµ£{uøòÄÓo=(²•Š{£¸õ œíÕ|•“v»Uˆ®³VÊÂõÕs5Õ±Œ”§º$eU¢>ÏË¢,Ÿo˜9ù®,ær7'x\¯wÌ ,ñêÚU8Á~¾3lMÍŞÊgŸ—Ÿ<Éæ^È0ÅŞ©²YdUîy¹¨µùÍ8şÒ^Á×«…€Ïìœ»Ê×0Æ¼ £8ª(NŠ‹ â¨ƒ88H† $„6$J
+5K¡&ÈGÉ \>¬ƒ‡.]ş.".Àº© ˆ<>th×‡ğëóæMŞ½¼µe„$÷@†¡AÂ²l)šœ½{§.loã[CCN)VGï8²oÏ"ÀÁÃ{sµ…¸¢,[Û¸§Â=½µZ…6Ø-ƒºQ¿~²ıhÍYÛër½ş×ººj÷^Á–†mUF6•1PJ%ĞÕO‹íşÁƒ¡néÀ
+2Zÿa'ú	;÷ï?täÜá@9”UÙ[Cû!¹·£%ç¶‹'›‹W×~§#¸?C»/-•€Ó\l£
+mB©º/7¯7·îÜ	CMßF­¡†À*¤©Öô{¹pğÂÁƒ9¹÷Œ×išdù‚–<ÙNûõşz]bK±áÆ[wŸ<yùp5öÚ¯?ËøÓµÂÀ(ÄÁ"™c:¦i|£©pñz³yĞ×wg"	9gˆ}ad BÈÉ##Œº	”`†“…hÉê´«ïÜ¹Û÷!ÅbÔÄww7÷_½OYânà7•¶®Mf[I0Ùé‰¤Ñwo=Ø¾»]Şòóu|ëR¤À«J  4F½aBªvKq"`å81 ¥‚†Šl}NÖc\ö5VÄOZO!àÛOÖİ×³CÑúµ˜%rp’iI¬·av	¯cy^nÖå6âq¤É­!4ÜVhc!«¥¬$”@6(t“)¤Øj$]}¬Çeö:Ç›WÏ®üÙê³Î^ÖùmĞ9kj§9¹±,ûşÁëbÆ>h7y›‰um†HòV¢F!`Ë(
+¥JZ€Pµ²áË@rJV¦Øáö·“ÏÌxóêo*Z¿³DÛ<Í>ÅÃXß-6›×e*ºç:h˜sTPœ'è jD@T„Bô‚ˆE=OSôÁ÷uı8'/uBıàïM¬_Ğ®Ã. ½öIÏÇwß®³¤
+Ÿğ—LÑRŠÀ…ƒpiB@³%aÜ‹ÛÊ#,'€sÏMa¢Mİ\ö¸œg=ÍpRcş+v¿mrLZtôãÒó¢.6Û:ì±·Ië´g\Ê0 åáoş&0Æ›r.©¢yÜ­ï·ÕèµM£î
+¼²`ogİÕ¬ëÔUçnšÇMWnV_Ë~´=Öİ4Ä†­7î@Ëq œ;Æ…U‚Ò…sËß@˜¬M:tåZàÎN!}~Ç¿­óWµÚ]÷õë¢èjïKï“¶š®ÍšnJ“mT8 $çrB‚V
+ğ-‚ÃàÓ4-sW–uYtØE­ÿñm–ï‡Áõ.Gp½ız-¸Š²Ãx^mÊ4((…€–Y64¼… + \9+‘0
+@ÄBU#4Ñ1y×”uë‹éâÿõ~&Ï{Sz¼ÙŞı
+ØF§‰¬1aeC”¬$"@ÑVCc ,oØ`«"œAE½£ŸS×}ïÿ5m–q×v.W¬|Å8y<N)ø‘5p©`¬Æ0·~BÚ*ƒŞĞ¥¡¡HˆJ˜%-Ø<Û®Xó ş'³Õœ-­mèÅë¹sİ<Ù†F•!  ÏŠ‘VĞ@Ò²¥e ‚8˜-r[Pô†è”S½ïû¿¬Íò#`PwŸ¸Æ}ŸbÒÁ‹PÜHEiËmK ¯lc„ 1Øˆ ’@ §)G?y_ü…m–àìÕ6wÇ¢Cšâú¼'¬¼É‰j’í{²:ÀØG %¤ÊtˆšuL™¤pú_ÏVŸÓÁkÅëò.è´Øian0VÁÅÅ­Š,À9eµ°†È[F€P<Óe‹ÂfŞÊYÿ+»ß¢cÛ%®kŸ–˜Ç`‘l$@ˆÂÕÃ, ‚è†"H5Goihcz»ıŞµhıZÌv¸¾“b“
+ª%1V©²ÆÂJ:8°IH¥sŒ"bZhƒıÖ¯˜=k7½51RÜ›–CĞmÉm 7 (Š„Zv°Š/ñ?XßµoÆ¨
+1=Œq“2ur nBªİ*uØ2Û©X˜Ñ "(,3Án!¤ØÊ‡H½—ğ²G°qcğ¼RåGıÿ<kûÍ‡ÏÕÉ
+˜É äÔ"œ$Po	
+=ƒc‚!ó1B×ÖÃzö7{XÖÈÛ, y!PA%C„è‘†	sŞå©ªz	û9¥ˆÁi1ùmv«/˜¾tcL,¨±Ì ùı¹,²yìj…‰
+óä9¸%ÆIe:ëŸn¿%x“¼¼íz,ÀQ5)P·ğÔñkÛÔM½ŠÍ¾iû¾Ã1;’ß®ÛnwÍCÕô^ùçlt½*7Ù    IEND®B`‚
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\assets\react.svg
+========================================
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\assets\vite.svg
+========================================
+<svg xmlns="http://www.w3.org/2000/svg" width="77" height="47" fill="none" aria-labelledby="vite-logo-title" viewBox="0 0 77 47"><title id="vite-logo-title">Vite</title><style>.parenthesis{fill:#000}@media (prefers-color-scheme:dark){.parenthesis{fill:#fff}}</style><path fill="#9135ff" d="M40.151 45.71c-.663.844-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.493c-.92 0-1.457-1.04-.92-1.788l7.479-10.471c1.07-1.498 0-3.578-1.842-3.578H15.443c-.92 0-1.456-1.04-.92-1.788l9.696-13.576c.213-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.472c-1.07 1.497 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.087.89 1.83L40.153 45.712z"/><mask id="a" width="48" height="47" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M40.047 45.71c-.663.843-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.389c-.92 0-1.457-1.04-.92-1.788l7.479-10.472c1.07-1.497 0-3.578-1.842-3.578H15.34c-.92 0-1.456-1.04-.92-1.788l9.696-13.575c.213-.297.556-.474.92-.474H53.93c.92 0 1.456 1.04.92 1.788L47.37 13.03c-1.07 1.498 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.088.89 1.831L40.049 45.712z"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#eee6ff" rx="5.508" ry="14.704" transform="rotate(269.814 20.96 11.29)scale(-1 1)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#eee6ff" rx="10.399" ry="29.851" transform="rotate(89.814 -16.902 -8.275)scale(1 -1)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#8900ff" rx="5.508" ry="30.487" transform="rotate(89.814 -19.197 -7.127)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.928 4.177)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.738 5.52)scale(1 -1)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#eee6ff" rx="14.072" ry="22.078" transform="rotate(93.35 31.245 55.578)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx="14.592" cy="9.743" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(39.51 14.592 9.743)"/></g><g filter="url(#k)"><ellipse cx="61.728" cy="-5.321" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 61.728 -5.32)"/></g><g filter="url(#l)"><ellipse cx="55.618" cy="7.104" fill="#00c2ff" rx="5.971" ry="9.665" transform="rotate(37.892 55.618 7.104)"/></g><g filter="url(#m)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#n)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#o)"><ellipse cx="49.857" cy="30.678" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 49.857 30.678)"/></g><g filter="url(#p)"><ellipse cx="52.623" cy="33.171" fill="#00c2ff" rx="5.971" ry="15.297" transform="rotate(37.892 52.623 33.17)"/></g></g><path d="M6.919 0c-9.198 13.166-9.252 33.575 0 46.789h6.215c-9.25-13.214-9.196-33.623 0-46.789zm62.424 0h-6.215c9.198 13.166 9.252 33.575 0 46.789h6.215c9.25-13.214 9.196-33.623 0-46.789" class="parenthesis"/><defs><filter id="b" width="60.045" height="41.654" x="-5.564" y="16.92" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-40.407" y="-6.762" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-35.435" y="2.801" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-30.84" y="20.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-29.307" y="21.949" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="29.961" y="-17.13" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-13.43" y="-22.082" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="34.321" y="-37.644" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="38.847" y="-10.552" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="22.45" y="-1.645" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="32.919" y="11.36" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter></defs></svg>
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\components\BillingDashboard.jsx
+========================================
+import { useEffect, useMemo, useState } from 'react';
+import { supabase } from '../supabaseClient';
+import {
+  MEAL_LABELS,
+  calculateBaseWeeklyCost,
+  calculateNetPayable,
+  formatCurrency,
+  formatPreference,
+  normalizeMealPlan,
+  toNumber,
+} from '../erpHelpers';
+
+export default function BillingDashboard() {
+  const [customers, setCustomers] = useState([]);
+  const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+  const [paymentData, setPaymentData] = useState({});
+  const [savingCustomerId, setSavingCustomerId] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchData() {
+      setLoading(true);
+      setMessage('');
+
+      const [settingsResult, customersResult] = await Promise.all([
+        supabase.from('global_settings').select('*').single(),
+        supabase.from('customers').select('id, name, meal_plan, preference, credit_balance').order('name', { ascending: true }),
+      ]);
+
+      if (cancelled) return;
+
+      if (settingsResult.error || customersResult.error) {
+        setMessage(settingsResult.error?.message ?? customersResult.error?.message ?? 'Unable to load billing data.');
+      }
+
+      setSettings(settingsResult.data ?? null);
+      setCustomers(customersResult.data ?? []);
+      setLoading(false);
+    }
+
+    fetchData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const rows = useMemo(
+    () =>
+      customers.map((customer) => {
+        const baseCost = calculateBaseWeeklyCost(customer, settings);
+        const rawNetPayable = calculateNetPayable(customer, settings);
+
+        return {
+          ...customer,
+          mealPlan: normalizeMealPlan(customer.meal_plan),
+          baseCost,
+          rawNetPayable,
+          settlementDue: Math.max(rawNetPayable, 0),
+        };
+      }),
+    [customers, settings],
+  );
+
+  function handleInputChange(customerId, field, value) {
+    setPaymentData((previous) => ({
+      ...previous,
+      [customerId]: {
+        ...previous[customerId],
+        [field]: value,
+      },
+    }));
+  }
+
+  async function submitPayment(customer) {
+    const payment = paymentData[customer.id] ?? {};
+    const amountPaid = Number(payment.amount);
+    const upiId = payment.upi?.trim() || 'CASH';
+
+    if (!Number.isFinite(amountPaid) || amountPaid <= 0) {
+      setMessage('Enter a valid payment amount before settling the bill.');
+      return;
+    }
+
+    setSavingCustomerId(customer.id);
+    setMessage('');
+
+    const transactionResult = await supabase.from('transactions').insert([
+      {
+        customer_id: customer.id,
+        amount: amountPaid,
+        upi_id: upiId,
+      },
+    ]);
+
+    if (transactionResult.error) {
+      setMessage(transactionResult.error.message ?? 'Error saving transaction.');
+      setSavingCustomerId(null);
+      return;
+    }
+
+    const nextCreditBalance = toNumber(customer.credit_balance) + amountPaid - customer.settlementDue;
+    const updateResult = await supabase.from('customers').update({ credit_balance: nextCreditBalance }).eq('id', customer.id);
+
+    setSavingCustomerId(null);
+
+    if (updateResult.error) {
+      setMessage(updateResult.error.message ?? 'Error updating credit balance.');
+      return;
+    }
+
+    setMessage(`Logged ${formatCurrency(amountPaid)} for ${customer.name}.`);
+    setPaymentData((previous) => ({
+      ...previous,
+      [customer.id]: {},
+    }));
+
+    const { data } = await supabase.from('customers').select('id, name, meal_plan, preference, credit_balance').order('name', { ascending: true });
+    setCustomers(data ?? []);
+  }
+
+  return (
+    <section className="panel">
+      <div className="panel__header">
+        <div>
+          <span className="eyebrow">Weekly Billing</span>
+          <h2>Base plan, carry-forward, and settlement</h2>
+          <p>Base cost is derived from each customerâ€™s meal plan and global settings, then the current credit is deducted.</p>
+        </div>
+      </div>
+
+      <div className="summary-strip">
+        <div className="summary-card">
+          <span>Customers</span>
+          <strong>{customers.length}</strong>
+        </div>
+        <div className="summary-card">
+          <span>Status</span>
+          <strong>{loading ? 'Loading' : 'Ready'}</strong>
+        </div>
+        <div className="summary-card">
+          <span>NV premium</span>
+          <strong>{settings ? formatCurrency(settings.nv_premium) : 'â€”'}</strong>
+        </div>
+      </div>
+
+      {message ? <div className="message-banner">{message}</div> : null}
+
+      {loading ? (
+        <div className="empty-state">Loading the weekly billing engine...</div>
+      ) : rows.length === 0 ? (
+        <div className="empty-state">No customers were returned for billing.</div>
+      ) : (
+        <div className="table-shell">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Meal plan</th>
+                <th>Preference</th>
+                <th>Base plan cost</th>
+                <th>Carry-forward</th>
+                <th>Net payable</th>
+                <th>Amount paid</th>
+                <th>UPI reference</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((customer) => (
+                <tr key={customer.id}>
+                  <td>
+                    <strong>{customer.name}</strong>
+                  </td>
+                  <td>
+                    <div className="chip-list">
+                      {customer.mealPlan.length ? (
+                          customer.mealPlan.map((meal) => <span className="chip" key={meal}>{MEAL_LABELS[meal] ?? meal}</span>)
+                      ) : (
+                        <span className="chip chip--muted">No plan</span>
+                      )}
+                    </div>
+                  </td>
+                  <td>{formatPreference(customer.preference)}</td>
+                  <td>{formatCurrency(customer.baseCost)}</td>
+                  <td>
+                    <span className={`status-chip ${toNumber(customer.credit_balance) >= 0 ? 'status-chip--success' : 'status-chip--warning'}`}>
+                      {formatCurrency(customer.credit_balance)}
+                    </span>
+                  </td>
+                  <td>
+                    <strong>{formatCurrency(customer.rawNetPayable)}</strong>
+                    <div className="table-note">
+                      {customer.rawNetPayable < 0 ? `Advance credit ${formatCurrency(Math.abs(customer.rawNetPayable))}` : `Due ${formatCurrency(customer.settlementDue)}`}
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      className="form-input"
+                      type="number"
+                      min="0"
+                      step="1"
+                      placeholder={String(customer.settlementDue || 0)}
+                      value={paymentData[customer.id]?.amount ?? ''}
+                      onChange={(event) => handleInputChange(customer.id, 'amount', event.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="form-input"
+                      type="text"
+                      placeholder="UPI ID or CASH"
+                      value={paymentData[customer.id]?.upi ?? ''}
+                      onChange={(event) => handleInputChange(customer.id, 'upi', event.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="action-button"
+                      onClick={() => submitPayment(customer)}
+                      disabled={savingCustomerId === customer.id}
+                    >
+                      {savingCustomerId === customer.id ? 'Saving...' : 'Settle'}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+  );
+}
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\components\CustomerList.jsx
+========================================
+import { useEffect, useState } from 'react';
+import { supabase } from '../supabaseClient';
+import { MEAL_LABELS, MEAL_ORDER, formatCurrency, formatPreference, normalizeMealPlan, toNumber } from '../erpHelpers';
+
+const emptyCustomerDraft = {
+  id: '',
+  name: '',
+  preference: 'veg',
+  meal_plan: [],
+  start_date: '',
+  end_date: '',
+  credit_balance: '0',
+};
+
+const emptySettingsDraft = {
+  id: '',
+  base_breakfast: '0',
+  base_lunch: '0',
+  base_dinner: '0',
+  nv_premium: '0',
+};
+
+function createCustomerDraft(customer) {
+  if (!customer) return emptyCustomerDraft;
+
+  return {
+    id: customer.id,
+    name: customer.name ?? '',
+    preference: String(customer.preference ?? 'veg').toLowerCase(),
+    meal_plan: normalizeMealPlan(customer.meal_plan),
+    start_date: customer.start_date ?? '',
+    end_date: customer.end_date ?? '',
+    credit_balance: String(customer.credit_balance ?? 0),
+  };
+}
+
+function createSettingsDraft(settings) {
+  return {
+    id: settings?.id ?? '',
+    base_breakfast: String(settings?.base_breakfast ?? 0),
+    base_lunch: String(settings?.base_lunch ?? 0),
+    base_dinner: String(settings?.base_dinner ?? settings?.base_lunch ?? 0),
+    nv_premium: String(settings?.nv_premium ?? 0),
+  };
+}
+
+function isArchivedCustomer(customer) {
+  if (!customer) return false;
+
+  if (typeof customer.is_archived === 'boolean') {
+    return customer.is_archived;
+  }
+
+  if (typeof customer.active === 'boolean') {
+    return !customer.active;
+  }
+
+  return Boolean(customer.archived_at);
+}
+
+async function persistArchiveState(customerId, archived) {
+  const attempts = [
+    archived
+      ? { archived_at: new Date().toISOString() }
+      : { archived_at: null },
+    { is_archived: archived },
+    { active: !archived },
+  ];
+
+  let lastError = null;
+
+  for (const payload of attempts) {
+    const { error } = await supabase.from('customers').update(payload).eq('id', customerId);
+
+    if (!error) {
+      return { error: null };
+    }
+
+    lastError = error;
+  }
+
+  return { error: lastError };
+}
+
+export default function CustomerList() {
+  const [customers, setCustomers] = useState([]);
+  const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+  const [selectedCustomerId, setSelectedCustomerId] = useState('');
+  const [customerDraft, setCustomerDraft] = useState(emptyCustomerDraft);
+  const [settingsDraft, setSettingsDraft] = useState(emptySettingsDraft);
+  const [savingCustomer, setSavingCustomer] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchData() {
+      setLoading(true);
+      setMessage('');
+
+      const [customerResult, settingsResult] = await Promise.all([
+        supabase.from('customers').select('*').order('name', { ascending: true }),
+        supabase.from('global_settings').select('*').maybeSingle(),
+      ]);
+
+      if (cancelled) return;
+
+      if (customerResult.error || settingsResult?.error) {
+        setMessage(customerResult.error?.message ?? settingsResult?.error?.message ?? 'Unable to load customers.');
+        setCustomers([]);
+        setSettings(null);
+      } else {
+        const fetchedCustomers = customerResult.data ?? [];
+        const fetchedSettings = settingsResult?.data ?? null;
+
+        setCustomers(fetchedCustomers);
+        setSettings(fetchedSettings);
+        setSettingsDraft(createSettingsDraft(fetchedSettings));
+
+        if (fetchedCustomers.length > 0) {
+          const firstCustomer = fetchedCustomers[0];
+          setSelectedCustomerId(String(firstCustomer.id));
+          setCustomerDraft(createCustomerDraft(firstCustomer));
+        } else {
+          setSelectedCustomerId('');
+          setCustomerDraft(emptyCustomerDraft);
+        }
+      }
+
+      setLoading(false);
+    }
+
+    fetchData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  function selectCustomer(customerId) {
+    setSelectedCustomerId(customerId);
+
+    const selectedCustomer = customers.find((customer) => String(customer.id) === String(customerId));
+    if (selectedCustomer) {
+      setCustomerDraft(createCustomerDraft(selectedCustomer));
+    }
+  }
+
+  function toggleMeal(meal) {
+    setCustomerDraft((previous) => ({
+      ...previous,
+      meal_plan: previous.meal_plan.includes(meal)
+        ? previous.meal_plan.filter((entry) => entry !== meal)
+        : [...previous.meal_plan, meal],
+    }));
+  }
+
+  async function saveCustomer() {
+    if (!customerDraft.id) {
+      setMessage('Select a customer before saving.');
+      return;
+    }
+
+    setSavingCustomer(true);
+    setMessage('');
+
+    const { error } = await supabase
+      .from('customers')
+      .update({
+        name: customerDraft.name.trim(),
+        preference: customerDraft.preference,
+        meal_plan: customerDraft.meal_plan,
+        start_date: customerDraft.start_date || null,
+        end_date: customerDraft.end_date || null,
+        credit_balance: toNumber(customerDraft.credit_balance),
+      })
+      .eq('id', customerDraft.id);
+
+    if (error) {
+      setMessage(error.message ?? 'Unable to save customer.');
+    } else {
+      setMessage('Customer details saved.');
+      const { data } = await supabase.from('customers').select('*').order('name', { ascending: true });
+      setCustomers(data ?? []);
+    }
+
+    setSavingCustomer(false);
+  }
+
+  async function savePricing() {
+    setSavingSettings(true);
+    setMessage('');
+
+    const payload = {
+      id: settingsDraft.id || settings?.id || 1,
+      base_breakfast: toNumber(settingsDraft.base_breakfast),
+      base_lunch: toNumber(settingsDraft.base_lunch),
+      base_dinner: toNumber(settingsDraft.base_dinner),
+      nv_premium: toNumber(settingsDraft.nv_premium),
+    };
+
+    const { error } = await supabase.from('global_settings').upsert(payload, { onConflict: 'id' });
+
+    if (error) {
+      setMessage(error.message ?? 'Unable to save pricing settings.');
+    } else {
+      setMessage('Pricing settings saved.');
+      const { data } = await supabase.from('global_settings').select('*').maybeSingle();
+      setSettings(data ?? null);
+    }
+
+    setSavingSettings(false);
+  }
+
+  async function toggleArchive(customer) {
+    setMessage('');
+
+    const { error } = await persistArchiveState(customer.id, !isArchivedCustomer(customer));
+
+    if (error) {
+      setMessage(error.message ?? 'Unable to update archive state.');
+      return;
+    }
+
+    setMessage(isArchivedCustomer(customer) ? 'Customer restored.' : 'Customer archived.');
+
+    const { data } = await supabase.from('customers').select('*').order('name', { ascending: true });
+    setCustomers(data ?? []);
+  }
+
+  return (
+    <section className="panel">
+      <div className="panel__header">
+        <div>
+          <span className="eyebrow">Customers</span>
+          <h2>Edit customer details and base pricing</h2>
+          <p>Update subscription windows, meal plans, and base meal costs from the app.</p>
+        </div>
+      </div>
+
+      <div className="summary-strip">
+        <div className="summary-card">
+          <span>Customer count</span>
+          <strong>{customers.length}</strong>
+        </div>
+        <div className="summary-card">
+          <span>Status</span>
+          <strong>{loading ? 'Loading' : 'Ready'}</strong>
+        </div>
+        <div className="summary-card">
+          <span>Breakfast cost</span>
+          <strong>{settings ? formatCurrency(settings.base_breakfast) : 'â€”'}</strong>
+        </div>
+      </div>
+
+      {message ? <div className="message-banner">{message}</div> : null}
+
+      <div className="editor-grid">
+        <article className="editor-panel">
+          <div className="editor-panel__header">
+            <div>
+              <span className="eyebrow">Customer editor</span>
+              <h3>Customer details</h3>
+            </div>
+
+            <label className="field field--date">
+              <span>Customer</span>
+              <select value={selectedCustomerId} onChange={(event) => selectCustomer(event.target.value)}>
+                {customers.map((customer) => (
+                  <option key={customer.id} value={customer.id}>
+                    {customer.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="form-grid form-grid--customer">
+            <label className="field">
+              <span>Name</span>
+              <input
+                value={customerDraft.name}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, name: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>Preference</span>
+              <select
+                value={customerDraft.preference}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, preference: event.target.value }))}
+              >
+                <option value="veg">Veg</option>
+                <option value="non-veg">Non-Veg</option>
+                <option value="non-veg premium">Non-Veg Premium</option>
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Start date</span>
+              <input
+                type="date"
+                value={customerDraft.start_date}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, start_date: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>End date</span>
+              <input
+                type="date"
+                value={customerDraft.end_date}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, end_date: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>Credit balance</span>
+              <input
+                type="number"
+                value={customerDraft.credit_balance}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, credit_balance: event.target.value }))}
+              />
+            </label>
+
+            <div className="field">
+              <span>Meal plan</span>
+              <div className="checkbox-grid">
+                {MEAL_ORDER.map((meal) => (
+                  <label className="checkbox-pill" key={meal}>
+                    <input type="checkbox" checked={customerDraft.meal_plan.includes(meal)} onChange={() => toggleMeal(meal)} />
+                    <span>{MEAL_LABELS[meal]}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="action-button" onClick={saveCustomer} disabled={savingCustomer}>
+              {savingCustomer ? 'Saving...' : 'Save customer'}
+            </button>
+          </div>
+        </article>
+
+        <article className="editor-panel">
+          <div className="editor-panel__header">
+            <div>
+              <span className="eyebrow">Pricing editor</span>
+              <h3>Base rates</h3>
+            </div>
+          </div>
+
+          <div className="form-grid">
+            <label className="field">
+              <span>Breakfast cost</span>
+              <input
+                type="number"
+                value={settingsDraft.base_breakfast}
+                onChange={(event) => setSettingsDraft((previous) => ({ ...previous, base_breakfast: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>Lunch cost</span>
+              <input
+                type="number"
+                value={settingsDraft.base_lunch}
+                onChange={(event) => setSettingsDraft((previous) => ({ ...previous, base_lunch: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>Dinner cost</span>
+              <input
+                type="number"
+                value={settingsDraft.base_dinner}
+                onChange={(event) => setSettingsDraft((previous) => ({ ...previous, base_dinner: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>NV premium</span>
+              <input
+                type="number"
+                value={settingsDraft.nv_premium}
+                onChange={(event) => setSettingsDraft((previous) => ({ ...previous, nv_premium: event.target.value }))}
+              />
+            </label>
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="action-button" onClick={savePricing} disabled={savingSettings}>
+              {savingSettings ? 'Saving...' : 'Save pricing'}
+            </button>
+          </div>
+        </article>
+      </div>
+
+      {loading ? (
+        <div className="empty-state">Loading customer profiles...</div>
+      ) : customers.length === 0 ? (
+        <div className="empty-state">No customers were returned from Supabase.</div>
+      ) : (
+        <div className="customer-grid">
+          {customers.map((customer) => {
+            const mealPlan = normalizeMealPlan(customer.meal_plan);
+            const isCreditPositive = toNumber(customer.credit_balance) >= 0;
+            const archived = isArchivedCustomer(customer);
+
+            return (
+              <article className={`customer-card ${archived ? 'customer-card--archived' : ''}`} key={customer.id}>
+                <div className="customer-card__top">
+                  <div>
+                    <h3>{customer.name}</h3>
+                    <p>{formatPreference(customer.preference)}</p>
+                  </div>
+                  <div className="customer-card__stack">
+                    <span className={`status-chip ${archived ? 'status-chip--neutral' : isCreditPositive ? 'status-chip--success' : 'status-chip--warning'}`}>
+                      {archived ? 'Archived' : formatCurrency(customer.credit_balance)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="chip-list">
+                  {mealPlan.length ? (
+                    mealPlan.map((meal) => <span className="chip" key={meal}>{MEAL_LABELS[meal] ?? meal}</span>)
+                  ) : (
+                    <span className="chip chip--muted">No meal plan</span>
+                  )}
+                </div>
+
+                <dl className="customer-card__meta">
+                  <div>
+                    <dt>Start</dt>
+                    <dd>{customer.start_date || 'Unset'}</dd>
+                  </div>
+                  <div>
+                    <dt>End</dt>
+                    <dd>{customer.end_date || 'Open ended'}</dd>
+                  </div>
+                  <div>
+                    <dt>Meals</dt>
+                    <dd>{mealPlan.length ? `${mealPlan.length} subscribed` : 'Not set'}</dd>
+                  </div>
+                </dl>
+
+                <div className="customer-card__footer">
+                  <span>{archived ? 'Hidden from active operations' : isCreditPositive ? 'Carry-forward credit' : 'Outstanding due'}</span>
+                  <div className="customer-card__actions">
+                    <button type="button" className="text-button" onClick={() => selectCustomer(String(customer.id))}>
+                      Edit
+                    </button>
+                    <button type="button" className="text-button text-button--danger" onClick={() => toggleArchive(customer)}>
+                      {archived ? 'Restore' : 'Archive'}
+                    </button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
+========================================
+FILE: C:\Users\EZHIL\Documents\REDS-Homefoods\homefoods-erp\src\components\DailyDashboard.jsx
+========================================
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { supabase } from '../supabaseClient';
+import {
+  MEAL_LABELS,
+  STATUS_LABELS,
+  calculateBaseWeeklyCost,
+  calculateNetPayable,
+  cycleMealStatus,
+  defaultRosterRow,
+  formatCurrency,
+  formatPreference,
+  formatDateInput,
+  getDefaultRosterDate,
+  getMonday,
+  addDays,
+  parseDate,
+  normalizeMealPlan,
+  isArchivedCustomer,
+  isSameCalendarDate,
+  isWithinCustomerWindow,
+  statusTone,
+  toNumber,
+} from '../erpHelpers';
+
+const mealColumns = [
+  { key: 'b_status', label: MEAL_LABELS.breakfast },
+  { key: 'l_status', label: MEAL_LABELS.lunch },
+  { key: 'd_status', label: MEAL_LABELS.dinner },
+];
+
+const mealKeyLookup = {
+  b_status: 'breakfast',
+  l_status: 'lunch',
+  d_status: 'dinner',
+};
+
+function buildMealState(customer, rosterRow, mealColumn, selectedDate) {
+  const mealPlan = normalizeMealPlan(customer.meal_plan);
+  const fallbackRow = defaultRosterRow(customer.id, selectedDate, mealPlan);
+  const status = rosterRow?.[mealColumn] ?? fallbackRow[mealColumn];
+  const subscribed = mealPlan.includes(mealKeyLookup[mealColumn]);
+
+  return {
+    status,
+    subscribed,
+    label: STATUS_LABELS[String(status).toLowerCase()] ?? String(status ?? 'Inactive'),
+  };
+}
+
+function buildWeekDates(referenceDate) {
+  const weekStart = getMonday(parseDate(referenceDate) ?? new Date());
+
+  return Array.from({ length: 7 }, (_, index) => formatDateInput(addDays(weekStart, index)));
+}
+
+function getDayLabel(dateString) {
+  const date = parseDate(dateString);
+
+  if (!date) return dateString;
+
+  return date.toLocaleDateString('en-IN', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
+}
+
+function emptyMealCounts() {
+  return { breakfast: 0, lunch: 0, dinner: 0 };
+}
+
+function getMealName(mealColumn) {
+  return mealColumn[0] === 'b' ? 'breakfast' : mealColumn[0] === 'l' ? 'lunch' : 'dinner';
+}
+
+export default function DailyDashboard() {
+  const [date, setDate] = useState(() => getDefaultRosterDate(new Date()));
+  const [customers, setCustomers] = useState([]);
+  const [roster, setRoster] = useState([]);
+  const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+  const [savingKey, setSavingKey] = useState('');
+  const mountedRef = useRef(true);
+
+  const weekDays = useMemo(() => buildWeekDates(date), [date]);
+  const weekStart = weekDays[0];
+  const weekEnd = weekDays[weekDays.length - 1];
+
+  useEffect(() => () => {
+    mountedRef.current = false;
+  }, []);
+
+  async function loadRoster(selectedDate) {
+    await Promise.resolve();
+    setLoading(true);
+    setMessage('');
+
+    try {
+      const selectedWeekDays = buildWeekDates(selectedDate);
+      const selectedWeekStart = selectedWeekDays[0];
+      const selectedWeekEnd = selectedWeekDays[selectedWeekDays.length - 1];
+
+      const [customerResult, rosterResult, settingsResult] = await Promise.all([
+        supabase.from('customers').select('id, name, meal_plan, preference, credit_balance, start_date, end_date').order('name', { ascending: true }),
+        supabase
+          .from('daily_roster')
+          .select('id, customer_id, roster_date, b_status, l_status, d_status')
+          .gte('roster_date', selectedWeekStart)
+          .lte('roster_date', selectedWeekEnd),
+        supabase.from('global_settings').select('*').single(),
+      ]);
+
+      if (!mountedRef.current) return;
+
+      if (customerResult.error || rosterResult.error || settingsResult?.error) {
+        setMessage(customerResult.error?.message ?? rosterResult.error?.message ?? settingsResult?.error?.message ?? 'Unable to load daily roster.');
+      } else {
+        setMessage('');
+      }
+
+      setCustomers(customerResult.data ?? []);
+      setRoster(rosterResult.data ?? []);
+      setSettings(settingsResult?.data ?? null);
+    } catch (error) {
+      if (mountedRef.current) {
+        setMessage(error?.message ?? 'Unable to load daily roster.');
+        setCustomers([]);
+        setRoster([]);
+        setSettings(null);
+      }
+    } finally {
+      if (mountedRef.current) {
+        setLoading(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    void (async () => {
+      await loadRoster(date);
+    })();
+  }, [date]);
+
+  const rosterRowsForSelectedDay = useMemo(() => roster.filter((row) => isSameCalendarDate(row.roster_date, date)), [roster, date]);
+  const rosterLookup = useMemo(() => new Map(rosterRowsForSelectedDay.map((row) => [row.customer_id, row])), [rosterRowsForSelectedDay]);
+  const rosterCustomerIds = useMemo(() => new Set(rosterRowsForSelectedDay.map((row) => String(row.customer_id))), [rosterRowsForSelectedDay]);
+  const dateLookup = useMemo(
+    () =>
+      new Map(
+        weekDays.map((day) => [
+          day,
+          roster.filter((row) => isSameCalendarDate(row.roster_date, day)),
+        ]),
+      ),
+    [roster, weekDays],
+  );
+
+  const selectedDayRows = useMemo(
+    () =>
+      rosterRowsForSelectedDay
+        .map((row) => ({
+          rosterRow: row,
+          customer: customers.find((customer) => String(customer.id) === String(row.customer_id)),
+        }))
+        .filter((entry) => entry.customer),
+    [customers, rosterRowsForSelectedDay],
+  );
+
+  const availableCustomers = useMemo(
+    () => customers.filter((customer) => !rosterCustomerIds.has(String(customer.id)) && !isArchivedCustomer(customer) && isWithinCustomerWindow(customer, date)),
+    [customers, rosterCustomerIds, date],
+  );
+
+  async function handleToggle(customer, mealColumn) {
+    const existingRow = rosterLookup.get(customer.id);
+    const baseRow = existingRow ?? defaultRosterRow(customer.id, date, customer.meal_plan);
+    const nextStatus = cycleMealStatus(baseRow[mealColumn], mealColumn);
+    const payload = {
+      customer_id: baseRow.customer_id,
+      roster_date: baseRow.roster_date,
+      b_status: baseRow.b_status,
+      l_status: baseRow.l_status,
+      d_status: baseRow.d_status,
+      [mealColumn]: nextStatus,
+    };
+
+    setSavingKey(`${customer.id}-${mealColumn}`);
+    const { error } = await supabase.from('daily_roster').upsert(payload, {
+      onConflict: 'customer_id,roster_date',
+    });
+    setSavingKey('');
+
+    if (error) {
+      setMessage(error.message ?? 'Error updating meal status.');
+      return;
+    }
+
+    setMessage(`Updated ${customer.name}'s ${MEAL_LABELS[getMealName(mealColumn)]} roster.`);
+    await loadRoster(date);
+  }
+
+  async function addCustomerToRoster(customer) {
+    setSavingKey(`add-${customer.id}`);
+
+    const { error } = await supabase.from('daily_roster').upsert(defaultRosterRow(customer.id, date, customer.meal_plan), {
+      onConflict: 'customer_id,roster_date',
+    });
+
+    setSavingKey('');
+
+    if (error) {
+      setMessage(error.message ?? 'Unable to add customer to roster.');
+      return;
+    }
+
+    setMessage(`Added ${customer.name} to the roster.`);
+    await loadRoster(date);
+  }
+
+  async function fetchLatestCustomers() {
+    const { data, error } = await supabase
+      .from('customers')
+      .select('id, name, meal_plan, preference, credit_balance, start_date, end_date, archived_at, is_archived, active')
+      .order('name', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    return data ?? [];
+  }
+
+  async function removeCustomerFromRoster(customer) {
+    setSavingKey(`remove-${customer.id}`);
+
+    const { error } = await supabase.from('daily_roster').delete().eq('customer_id', customer.id).eq('roster_date', date);
+
+    setSavingKey('');
+
+    if (error) {
+      setMessage(error.message ?? 'Unable to remove customer from roster.');
+      return;
+    }
+
+    setMessage(`Removed ${customer.name} from the roster.`);
+    await loadRoster(date);
+  }
+
+  async function rosterAllCustomers() {
+    setSavingKey('roster-all');
+
+    try {
+      const [latestCustomers, currentSettings] = await Promise.all([fetchLatestCustomers(), supabase.from('global_settings').select('*').single()]);
+
+      if (currentSettings.error) {
+        setMessage(currentSettings.error.message ?? 'Unable to load pricing settings for roster all.');
+        return;
+      }
+
+      const eligibleCustomers = latestCustomers.filter((customer) => {
+        if (isArchivedCustomer(customer)) return false;
+        if (!isWithinCustomerWindow(customer, date)) return false;
+        return true;
+      });
+
+      if (eligibleCustomers.length === 0) {
+        setMessage('No eligible customers found for the selected roster date.');
+        return;
+      }
+
+      const rows = eligibleCustomers.map((customer) => ({
+        ...defaultRosterRow(customer.id, date, customer.meal_plan),
+        customer_id: customer.id,
+        roster_date: date,
+      }));
+
+      const rosterResult = await supabase.from('daily_roster').upsert(rows, {
+        onConflict: 'customer_id,roster_date',
+      });
+
+      if (rosterResult.error) {
+        setMessage(rosterResult.error.message ?? 'Unable to apply roster all.');
+        return;
+      }
+
+      const baseTotal = eligibleCustomers.reduce((total, customer) => total + calculateBaseWeeklyCost(customer, currentSettings.data), 0);
+      const netTotal = eligibleCustomers.reduce((total, customer) => total + calculateNetPayable(customer, currentSettings.data), 0);
+
+      setMessage(
+        `Roster all applied for ${eligibleCustomers.length} customers. Base total ${formatCurrency(baseTotal)}. Net payable ${formatCurrency(netTotal)}.`,
+      );
+      await loadRoster(date);
+    } catch (error) {
+      setMessage(error?.message ?? 'Unable to apply roster all.');
+    } finally {
+      setSavingKey('');
+    }
+  }
+
+  async function rosterSameAsYesterday() {
+    const yesterday = formatDateInput(addDays(parseDate(date) ?? new Date(), -1));
+
+    setSavingKey('same-yesterday');
+
+    try {
+      const [latestCustomers, yesterdayRosterResult, currentSettings] = await Promise.all([
+        fetchLatestCustomers(),
+        supabase
+          .from('daily_roster')
+          .select('customer_id, b_status, l_status, d_status')
+          .eq('roster_date', yesterday),
+        supabase.from('global_settings').select('*').single(),
+      ]);
+
+      if (currentSettings.error) {
+        setMessage(currentSettings.error.message ?? 'Unable to load pricing settings for copy roster.');
+        return;
+      }
+
+      if (yesterdayRosterResult.error) {
+        setMessage(yesterdayRosterResult.error.message ?? 'Unable to copy yesterday roster.');
+        return;
+      }
+
+      const yesterdayLookup = new Map((yesterdayRosterResult.data ?? []).map((row) => [String(row.customer_id), row]));
+      const eligibleCustomers = latestCustomers.filter((customer) => !isArchivedCustomer(customer) && isWithinCustomerWindow(customer, date));
+
+      if (eligibleCustomers.length === 0) {
+        setMessage('No eligible customers found for the selected roster date.');
+        return;
+      }
+
+      const payload = eligibleCustomers.map((customer) => {
+        const yesterdayRow = yesterdayLookup.get(String(customer.id));
+        const fallbackRow = defaultRosterRow(customer.id, date, customer.meal_plan);
+
+        return {
+          customer_id: customer.id,
+          roster_date: date,
+          b_status: yesterdayRow?.b_status ?? fallbackRow.b_status,
+          l_status: yesterdayRow?.l_status ?? fallbackRow.l_status,
+          d_status: yesterdayRow?.d_status ?? fallbackRow.d_status,
+        };
+      });
+
+      const copyResult = await supabase.from('daily_roster').upsert(payload, {
+        onConflict: 'customer_id,roster_date',
+      });
+
+      if (copyResult.error) {
+        setMessage(copyResult.error.message ?? 'Unable to apply same as yesterday.');
+        return;
+      }
+
+      const baseTotal = eligibleCustomers.reduce((total, customer) => total + calculateBaseWeeklyCost(customer, currentSettings.data), 0);
+      const netTotal = eligibleCustomers.reduce((total, customer) => total + calculateNetPayable(customer, currentSettings.data), 0);
+
+      setMessage(
+        `Copied yesterday roster into ${eligibleCustomers.length} customers. Base total ${formatCurrency(baseTotal)}. Net payable ${formatCurrency(netTotal)}.`,
+      );
+      await loadRoster(date);
+    } catch (error) {
+      setMessage(error?.message ?? 'Unable to apply same as yesterday.');
+    } finally {
+      setSavingKey('');
+    }
+  }
+
+  const rows = customers.map((customer) => {
+    const rosterRow = rosterLookup.get(customer.id);
+
+    return {
+      customer,
+      rosterRow,
+      baseCost: calculateBaseWeeklyCost(customer, settings),
+      mealPlan: normalizeMealPlan(customer.meal_plan),
+    };
+  });
+
+  const mealTotals = rows.reduce(
+    (totals, row) => {
+      const rosterRow = row.rosterRow;
+
+      if ((rosterRow?.b_status ?? 'skipped') === 'active') totals.breakfast += 1;
+      if ((rosterRow?.l_status ?? 'skipped') === 'active') totals.lunch += 1;
+      if ((rosterRow?.d_status ?? 'skipped') === 'active') totals.dinner += 1;
+
+      return totals;
+    },
+    { breakfast: 0, lunch: 0, dinner: 0 },
+  );
+
+  const calendarDays = weekDays.map((day) => {
+    const dayRows = dateLookup.get(day) ?? [];
+    const mealCounts = dayRows.reduce(
+      (totals, row) => {
+        if ((row.b_status ?? 'skipped') === 'active') totals.breakfast += 1;
+        if ((row.l_status ?? 'skipped') === 'active') totals.lunch += 1;
+        if ((row.d_status ?? 'skipped') === 'active') totals.dinner += 1;
+
+        return totals;
+      },
+      emptyMealCounts(),
+    );
+
+    return {
+      day,
+      label: getDayLabel(day),
+      mealCounts,
+      totalMeals: mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner,
+      isSelected: day === date,
+    };
+  });
+
+  return (
+    <section className="panel">
+      <div className="panel__header">
+        <div>
+          <span className="eyebrow">Daily Operations</span>
+          <h2>Roster control and carry-forward updates</h2>
+          <p>Each toggle writes directly to the roster table so the trigger can update customer credit immediately.</p>
+        </div>
+
+        <label className="field field--date">
+          <span>Date</span>
+          <input type="date" value={date} onChange={(event) => setDate(event.target.value)} />
+        </label>
+      </div>
+
+      <div className="summary-strip">
+        <div className="summary-card">
+          <span>Breakfast</span>
+          <strong>{mealTotals.breakfast}</strong>
+        </div>
+        <div className="summary-card">
+          <span>Lunch</span>
+          <strong>{mealTotals.lunch}</strong>
+        </div>
+        <div className="summary-card">
+          <span>Dinner</span>
+          <strong>{mealTotals.dinner}</strong>
+        </div>
+      </div>
+
+      {message ? <div className="message-banner">{message}</div> : null}
+
+      <div className="roster-actions">
+        <button type="button" className="action-button roster-action" onClick={rosterSameAsYesterday} disabled={savingKey === 'same-yesterday'}>
+          Same as yesterday
+        </button>
+        <button type="button" className="action-button roster-action" onClick={rosterAllCustomers} disabled={savingKey === 'roster-all'}>
+          Roster all
+        </button>
+      </div>
+
+      <section className="calendar-panel">
+        <div className="calendar-panel__header">
+          <div>
+            <span className="eyebrow">Weekly calendar</span>
+            <h3>{getDayLabel(weekStart)} - {getDayLabel(weekEnd)}</h3>
+          </div>
+          <p>Click a day to load its roster in the table below.</p>
+        </div>
+
+        <div className="calendar-grid">
+          {calendarDays.map((day) => (
+            <button
+              key={day.day}
+              type="button"
+              className={`calendar-day ${day.isSelected ? 'calendar-day--selected' : ''}`}
+              onClick={() => setDate(day.day)}
+            >
+              <span className="calendar-day__label">{day.label}</span>
+              <strong>{day.totalMeals}</strong>
+              <div className="calendar-day__counts">
+                <span>B {day.mealCounts.breakfast}</span>
+                <span>L {day.mealCounts.lunch}</span>
+                <span>D {day.mealCounts.dinner}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {loading ? (
+        <div className="empty-state">Loading the weekly roster for {date}...</div>
+      ) : selectedDayRows.length === 0 ? (
+        <div className="empty-state">No roster rows were returned for {getDayLabel(date)}.</div>
+      ) : (
+        <section className="day-roster-panel">
+          <div className="day-roster-panel__header">
+            <div>
+              <span className="eyebrow">Selected day</span>
+              <h3>{getDayLabel(date)}</h3>
+            </div>
+            <div className="day-roster-panel__meta">
+              <span className="status-chip status-chip--neutral">Breakfast {mealTotals.breakfast}</span>
+              <span className="status-chip status-chip--neutral">Lunch {mealTotals.lunch}</span>
+              <span className="status-chip status-chip--neutral">Dinner {mealTotals.dinner}</span>
+            </div>
+          </div>
+
+          <div className="table-shell">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Preference</th>
+                  <th>Meal plan</th>
+                  <th>Credit balance</th>
+                  <th>Breakfast</th>
+                  <th>Lunch</th>
+                  <th>Dinner</th>
+                  <th>Week base</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedDayRows.map(({ customer, rosterRow, mealPlan, baseCost }) => (
+                  <tr key={customer.id}>
+                    <td>
+                      <strong>{customer.name}</strong>
+                    </td>
+                    <td>{formatPreference(customer.preference)}</td>
+                    <td>
+                      <div className="chip-list">
+                        {mealPlan.length ? mealPlan.map((meal) => <span className="chip" key={meal}>{MEAL_LABELS[meal]}</span>) : <span className="chip chip--muted">No plan</span>}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`status-chip status-chip--${toNumber(customer.credit_balance) >= 0 ? 'success' : 'warning'}`}>
+                        {formatCurrency(customer.credit_balance)}
+                      </span>
+                    </td>
+                    {mealColumns.map((mealColumn) => {
+                      const mealState = buildMealState(customer, rosterRow, mealColumn.key, date);
+                      const disabled = !mealState.subscribed;
+
+                      return (
+                        <td key={mealColumn.key}>
+                          <button
+                            type="button"
+                            className={`status-toggle status-toggle--${statusTone(mealState.status)}`}
+                            onClick={() => handleToggle(customer, mealColumn.key)}
+                            disabled={disabled || savingKey === `${customer.id}-${mealColumn.key}`}
+                            title={disabled ? 'This meal is not in the subscribed plan' : 'Click to cycle the meal state'}
+                          >
+                            {disabled ? 'Not in plan' : mealState.label}
+                          </button>
+                        </td>
+                      );
+                    })}
+                    <td>{formatCurrency(baseCost)}</td>
+                    <td>
+                      <button type="button" className="text-button text-button--danger" onClick={() => removeCustomerFromRoster(customer)} disabled={savingKey === `remove-${customer.id}`}>
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      <section className="roster-pool-panel">
+        <div className="calendar-panel__header">
+          <div>
+            <span className="eyebrow">Roster pool</span>
+            <h3>Add customers to todayâ€™s roster</h3>
+          </div>
+          <p>{availableCustomers.length} customers available</p>
+        </div>
+
+        {availableCustomers.length === 0 ? (
+          <div className="empty-state">No additional customers are available to add for this day.</div>
+        ) : (
+          <div className="roster-pool-grid">
+            {availableCustomers.map((customer) => (
+              <article className="roster-pool-card" key={customer.id}>
+                <div>
+                  <strong>{customer.name}</strong>
+                  <p>{formatPreference(customer.preference)}</p>
+                </div>
+                <button type="button" className="action-button" onClick={() => addCustomerToRoster(customer)} disabled={savingKey === `add-${customer.id}`}>
+                  Add
+                </button>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+    </section>
+  );
+}

@@ -5,6 +5,8 @@ import { MEAL_LABELS, MEAL_ORDER, formatCurrency, formatPreference, normalizeMea
 const emptyCustomerDraft = {
   id: '',
   name: '',
+  mobile: '',
+  geo_point: '',
   preference: 'veg',
   meal_plan: [],
   start_date: '',
@@ -26,11 +28,12 @@ function createCustomerDraft(customer) {
   return {
     id: customer.id,
     name: customer.name ?? '',
+    mobile: customer.mobile ?? '',
+    geo_point: customer.geo_point ?? '',
     preference: String(customer.preference ?? 'veg').toLowerCase(),
     meal_plan: normalizeMealPlan(customer.meal_plan),
     start_date: customer.start_date ?? '',
-    end_date: customer.end_date ?? '',
-    credit_balance: String(customer.credit_balance ?? 0),
+    end_date: customer.end_date ?? ''
   };
 }
 
@@ -124,7 +127,7 @@ export default function CustomerList() {
           setSelectedCustomerId(String(firstCustomer.id));
           setCustomerDraft(createCustomerDraft(firstCustomer));
         } else {
-          setSelectedCustomerId('');
+          setSelectedCustomerId('new');
           setCustomerDraft(emptyCustomerDraft);
         }
       }
@@ -139,13 +142,21 @@ export default function CustomerList() {
     };
   }, []);
 
-  function selectCustomer(customerId) {
-    setSelectedCustomerId(customerId);
+  function handleCustomerSelectChange(value) {
+    setSelectedCustomerId(value);
 
-    const selectedCustomer = customers.find((customer) => String(customer.id) === String(customerId));
-    if (selectedCustomer) {
-      setCustomerDraft(createCustomerDraft(selectedCustomer));
+    if (value === 'new') {
+      setCustomerDraft(emptyCustomerDraft);
+    } else {
+      const selectedCustomer = customers.find((customer) => String(customer.id) === String(value));
+      if (selectedCustomer) {
+        setCustomerDraft(createCustomerDraft(selectedCustomer));
+      }
     }
+  }
+
+  function selectCustomer(customerId) {
+    handleCustomerSelectChange(customerId);
   }
 
   function toggleMeal(meal) {
@@ -158,32 +169,50 @@ export default function CustomerList() {
   }
 
   async function saveCustomer() {
-    if (!customerDraft.id) {
-      setMessage('Select a customer before saving.');
+    if (!customerDraft.name.trim()) {
+      setMessage('A customer name is required.');
       return;
     }
 
     setSavingCustomer(true);
     setMessage('');
 
-    const { error } = await supabase
-      .from('customers')
-      .update({
-        name: customerDraft.name.trim(),
-        preference: customerDraft.preference,
-        meal_plan: customerDraft.meal_plan,
-        start_date: customerDraft.start_date || null,
-        end_date: customerDraft.end_date || null,
-        credit_balance: toNumber(customerDraft.credit_balance),
-      })
-      .eq('id', customerDraft.id);
+    const payload = {
+      name: customerDraft.name.trim(),
+      mobile: customerDraft.mobile.trim() || null,
+      geo_point: customerDraft.geo_point.trim() || null,
+      preference: customerDraft.preference,
+      meal_plan: customerDraft.meal_plan,
+      start_date: customerDraft.start_date || null,
+      end_date: customerDraft.end_date || null,
+      credit_balance: toNumber(customerDraft.credit_balance),
+    };
+
+    let error, data;
+
+    // Detect if we are creating a new user or updating an existing one
+    if (selectedCustomerId === 'new') {
+      const result = await supabase.from('customers').insert([payload]).select().single();
+      error = result.error;
+      data = result.data;
+    } else {
+      const result = await supabase.from('customers').update(payload).eq('id', customerDraft.id).select().single();
+      error = result.error;
+      data = result.data;
+    }
 
     if (error) {
       setMessage(error.message ?? 'Unable to save customer.');
     } else {
-      setMessage('Customer details saved.');
-      const { data } = await supabase.from('customers').select('*').order('name', { ascending: true });
-      setCustomers(data ?? []);
+      setMessage(selectedCustomerId === 'new' ? 'New customer created successfully!' : 'Customer details saved.');
+      
+      const { data: updatedCustomers } = await supabase.from('customers').select('*').order('name', { ascending: true });
+      setCustomers(updatedCustomers ?? []);
+      
+      if (data) {
+        setSelectedCustomerId(String(data.id));
+        setCustomerDraft(createCustomerDraft(data));
+      }
     }
 
     setSavingCustomer(false);
@@ -262,17 +291,20 @@ export default function CustomerList() {
           <div className="editor-panel__header">
             <div>
               <span className="eyebrow">Customer editor</span>
-              <h3>Customer details</h3>
+              <h3>{selectedCustomerId === 'new' ? 'Add New Customer' : 'Customer details'}</h3>
             </div>
 
             <label className="field field--date">
-              <span>Customer</span>
-              <select value={selectedCustomerId} onChange={(event) => selectCustomer(event.target.value)}>
-                {customers.map((customer) => (
-                  <option key={customer.id} value={customer.id}>
-                    {customer.name}
-                  </option>
-                ))}
+              <span>Select Profile</span>
+              <select value={selectedCustomerId} onChange={(event) => handleCustomerSelectChange(event.target.value)}>
+                <option value="new" style={{ fontWeight: 'bold' }}>+ Add New Customer</option>
+                <optgroup label="Existing Customers">
+                  {customers.map((customer) => (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.name}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
             </label>
           </div>
@@ -294,7 +326,6 @@ export default function CustomerList() {
               >
                 <option value="veg">Veg</option>
                 <option value="non-veg">Non-Veg</option>
-                <option value="non-veg premium">Non-Veg Premium</option>
               </select>
             </label>
 
@@ -340,7 +371,7 @@ export default function CustomerList() {
 
           <div className="form-actions">
             <button type="button" className="action-button" onClick={saveCustomer} disabled={savingCustomer}>
-              {savingCustomer ? 'Saving...' : 'Save customer'}
+              {savingCustomer ? 'Saving...' : (selectedCustomerId === 'new' ? 'Create customer' : 'Save changes')}
             </button>
           </div>
         </article>

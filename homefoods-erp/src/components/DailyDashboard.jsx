@@ -5,7 +5,6 @@ import {
   STATUS_LABELS,
   calculateBaseWeeklyCost,
   calculateNetPayable,
-  cycleMealStatus,
   defaultRosterRow,
   formatCurrency,
   formatPreference,
@@ -102,7 +101,7 @@ export default function DailyDashboard() {
       const selectedWeekEnd = selectedWeekDays[selectedWeekDays.length - 1];
 
       const [customerResult, rosterResult, settingsResult] = await Promise.all([
-        supabase.from('customers').select('id, name, meal_plan, preference, credit_balance, start_date, end_date').order('name', { ascending: true }),
+        supabase.from('customers').select('*').order('name', { ascending: true }),
         supabase
           .from('daily_roster')
           .select('id, customer_id, roster_date, b_status, l_status, d_status')
@@ -143,8 +142,9 @@ export default function DailyDashboard() {
   }, [date]);
 
   const rosterRowsForSelectedDay = useMemo(() => roster.filter((row) => isSameCalendarDate(row.roster_date, date)), [roster, date]);
-  const rosterLookup = useMemo(() => new Map(rosterRowsForSelectedDay.map((row) => [row.customer_id, row])), [rosterRowsForSelectedDay]);
+  const rosterLookup = useMemo(() => new Map(rosterRowsForSelectedDay.map((row) => [String(row.customer_id), row])), [rosterRowsForSelectedDay]);
   const rosterCustomerIds = useMemo(() => new Set(rosterRowsForSelectedDay.map((row) => String(row.customer_id))), [rosterRowsForSelectedDay]);
+  
   const dateLookup = useMemo(
     () =>
       new Map(
@@ -156,15 +156,32 @@ export default function DailyDashboard() {
     [roster, weekDays],
   );
 
+  // FIX: Instead of mapping over the unsorted roster rows (which causes the UI to jump around after updates),
+  // we map over the natively sorted "customers" array and match them with their roster row.
   const selectedDayRows = useMemo(
     () =>
-      rosterRowsForSelectedDay
-        .map((row) => ({
-          rosterRow: row,
-          customer: customers.find((customer) => String(customer.id) === String(row.customer_id)),
-        }))
-        .filter((entry) => entry.customer),
-    [customers, rosterRowsForSelectedDay],
+      customers
+        .filter((customer) => rosterCustomerIds.has(String(customer.id)))
+        .sort((a, b) => {
+          // Sort logic: Non-veg first, then Veg. Inside those groups, sort alphabetically by name.
+          const isNonVegA = String(a.preference || '').toLowerCase().includes('non');
+          const isNonVegB = String(b.preference || '').toLowerCase().includes('non');
+
+          if (isNonVegA && !isNonVegB) return -1;
+          if (!isNonVegA && isNonVegB) return 1;
+          
+          return (a.name || '').localeCompare(b.name || '');
+        })
+        .map((customer) => {
+          const rosterRow = rosterLookup.get(String(customer.id));
+          return {
+            customer,
+            rosterRow,
+            mealPlan: normalizeMealPlan(customer.meal_plan),
+            baseCost: calculateBaseWeeklyCost(customer, settings),
+          };
+        }),
+    [customers, rosterCustomerIds, rosterLookup, settings],
   );
 
   const availableCustomers = useMemo(
@@ -172,10 +189,10 @@ export default function DailyDashboard() {
     [customers, rosterCustomerIds, date],
   );
 
-  async function handleToggle(customer, mealColumn) {
-    const existingRow = rosterLookup.get(customer.id);
+  // FIX: Replaced handleToggle cycle logic with a direct status set from the dropdown menu
+  async function handleStatusChange(customer, mealColumn, nextStatus) {
+    const existingRow = rosterLookup.get(String(customer.id));
     const baseRow = existingRow ?? defaultRosterRow(customer.id, date, customer.meal_plan);
-    const nextStatus = cycleMealStatus(baseRow[mealColumn], mealColumn);
     const payload = {
       customer_id: baseRow.customer_id,
       roster_date: baseRow.roster_date,
@@ -221,7 +238,7 @@ export default function DailyDashboard() {
   async function fetchLatestCustomers() {
     const { data, error } = await supabase
       .from('customers')
-      .select('id, name, meal_plan, preference, credit_balance, start_date, end_date, archived_at, is_archived, active')
+      .select('*')
       .order('name', { ascending: true });
 
     if (error) {
@@ -261,11 +278,12 @@ export default function DailyDashboard() {
       const eligibleCustomers = latestCustomers.filter((customer) => {
         if (isArchivedCustomer(customer)) return false;
         if (!isWithinCustomerWindow(customer, date)) return false;
+        if (rosterCustomerIds.has(String(customer.id))) return false;
         return true;
       });
 
       if (eligibleCustomers.length === 0) {
-        setMessage('No eligible customers found for the selected roster date.');
+        setMessage('No eligible customers found or everyone is already rostered for this date.');
         return;
       }
 
@@ -324,7 +342,13 @@ export default function DailyDashboard() {
       }
 
       const yesterdayLookup = new Map((yesterdayRosterResult.data ?? []).map((row) => [String(row.customer_id), row]));
-      const eligibleCustomers = latestCustomers.filter((customer) => !isArchivedCustomer(customer) && isWithinCustomerWindow(customer, date));
+      
+      const eligibleCustomers = latestCustomers.filter((customer) => {
+        if (isArchivedCustomer(customer)) return false;
+        if (!isWithinCustomerWindow(customer, date)) return false;
+        if (rosterCustomerIds.has(String(customer.id))) return false;
+        return true;
+      });
 
       if (eligibleCustomers.length === 0) {
         setMessage('No eligible customers found for the selected roster date.');
@@ -367,24 +391,14 @@ export default function DailyDashboard() {
     }
   }
 
-  const rows = customers.map((customer) => {
-    const rosterRow = rosterLookup.get(customer.id);
-
-    return {
-      customer,
-      rosterRow,
-      baseCost: calculateBaseWeeklyCost(customer, settings),
-      mealPlan: normalizeMealPlan(customer.meal_plan),
-    };
-  });
-
-  const mealTotals = rows.reduce(
+  const mealTotals = selectedDayRows.reduce(
     (totals, row) => {
       const rosterRow = row.rosterRow;
+      const isEaten = (status) => ['active', 'active_nv', 'nv_downgraded'].includes(status);
 
-      if ((rosterRow?.b_status ?? 'skipped') === 'active') totals.breakfast += 1;
-      if ((rosterRow?.l_status ?? 'skipped') === 'active') totals.lunch += 1;
-      if ((rosterRow?.d_status ?? 'skipped') === 'active') totals.dinner += 1;
+      if (isEaten(rosterRow?.b_status)) totals.breakfast += 1;
+      if (isEaten(rosterRow?.l_status)) totals.lunch += 1;
+      if (isEaten(rosterRow?.d_status)) totals.dinner += 1;
 
       return totals;
     },
@@ -395,9 +409,11 @@ export default function DailyDashboard() {
     const dayRows = dateLookup.get(day) ?? [];
     const mealCounts = dayRows.reduce(
       (totals, row) => {
-        if ((row.b_status ?? 'skipped') === 'active') totals.breakfast += 1;
-        if ((row.l_status ?? 'skipped') === 'active') totals.lunch += 1;
-        if ((row.d_status ?? 'skipped') === 'active') totals.dinner += 1;
+        const isEaten = (status) => ['active', 'active_nv', 'nv_downgraded'].includes(status);
+
+        if (isEaten(row.b_status)) totals.breakfast += 1;
+        if (isEaten(row.l_status)) totals.lunch += 1;
+        if (isEaten(row.d_status)) totals.dinner += 1;
 
         return totals;
       },
@@ -419,7 +435,7 @@ export default function DailyDashboard() {
         <div>
           <span className="eyebrow">Daily Operations</span>
           <h2>Roster control and carry-forward updates</h2>
-          <p>Each toggle writes directly to the roster table so the trigger can update customer credit immediately.</p>
+          <p>Each dropdown selection writes directly to the roster table to update customer credits instantly.</p>
         </div>
 
         <label className="field field--date">
@@ -539,15 +555,26 @@ export default function DailyDashboard() {
 
                       return (
                         <td key={mealColumn.key}>
-                          <button
-                            type="button"
-                            className={`status-toggle status-toggle--${statusTone(mealState.status)}`}
-                            onClick={() => handleToggle(customer, mealColumn.key)}
+                          <select
+                            className={`form-input status-toggle--${statusTone(mealState.status)}`}
+                            style={{ cursor: disabled ? 'not-allowed' : 'pointer', minWidth: '135px' }}
+                            value={mealState.status}
+                            onChange={(event) => handleStatusChange(customer, mealColumn.key, event.target.value)}
                             disabled={disabled || savingKey === `${customer.id}-${mealColumn.key}`}
-                            title={disabled ? 'This meal is not in the subscribed plan' : 'Click to cycle the meal state'}
+                            title={disabled ? 'This meal is not in the subscribed plan' : 'Select meal state'}
                           >
-                            {disabled ? 'Not in plan' : mealState.label}
-                          </button>
+                            {disabled ? (
+                              <option value={mealState.status}>Not in plan</option>
+                            ) : (
+                              <>
+                                <option value="active">Active (Veg)</option>
+                                <option value="skipped">Skipped</option>
+                                {mealColumn.key !== 'b_status' && (
+                                  <option value="active_nv">Active (Non-Veg)</option>
+                                )}
+                              </>
+                            )}
+                          </select>
                         </td>
                       );
                     })}
@@ -569,7 +596,7 @@ export default function DailyDashboard() {
         <div className="calendar-panel__header">
           <div>
             <span className="eyebrow">Roster pool</span>
-            <h3>Add customers to today’s roster</h3>
+            <h3>Add customers to today's roster</h3>
           </div>
           <p>{availableCustomers.length} customers available</p>
         </div>
