@@ -11,7 +11,6 @@ const emptyCustomerDraft = {
   meal_plan: [],
   start_date: '',
   end_date: '',
-  credit_balance: '0',
 };
 
 const emptySettingsDraft = {
@@ -34,7 +33,6 @@ function createCustomerDraft(customer) {
     meal_plan: normalizeMealPlan(customer.meal_plan),
     start_date: customer.start_date ?? '',
     end_date: customer.end_date ?? '',
-    credit_balance: String(customer.credit_balance ?? 0),
   };
 }
 
@@ -64,9 +62,7 @@ function isArchivedCustomer(customer) {
 
 async function persistArchiveState(customerId, archived) {
   const attempts = [
-    archived
-      ? { archived_at: new Date().toISOString() }
-      : { archived_at: null },
+    archived ? { archived_at: new Date().toISOString() } : { archived_at: null },
     { is_archived: archived },
     { active: !archived },
   ];
@@ -75,11 +71,7 @@ async function persistArchiveState(customerId, archived) {
 
   for (const payload of attempts) {
     const { error } = await supabase.from('customers').update(payload).eq('id', customerId);
-
-    if (!error) {
-      return { error: null };
-    }
-
+    if (!error) return { error: null };
     lastError = error;
   }
 
@@ -128,11 +120,10 @@ export default function CustomerList() {
           setSelectedCustomerId(String(firstCustomer.id));
           setCustomerDraft(createCustomerDraft(firstCustomer));
         } else {
-          setSelectedCustomerId('new');
+          setSelectedCustomerId('');
           setCustomerDraft(emptyCustomerDraft);
         }
       }
-
       setLoading(false);
     }
 
@@ -143,21 +134,18 @@ export default function CustomerList() {
     };
   }, []);
 
-  function handleCustomerSelectChange(value) {
-    setSelectedCustomerId(value);
-
-    if (value === 'new') {
-      setCustomerDraft(emptyCustomerDraft);
-    } else {
-      const selectedCustomer = customers.find((customer) => String(customer.id) === String(value));
-      if (selectedCustomer) {
-        setCustomerDraft(createCustomerDraft(selectedCustomer));
-      }
-    }
-  }
-
   function selectCustomer(customerId) {
-    handleCustomerSelectChange(customerId);
+    setSelectedCustomerId(customerId);
+
+    if (customerId === 'new') {
+      setCustomerDraft(emptyCustomerDraft);
+      return;
+    }
+
+    const selectedCustomer = customers.find((customer) => String(customer.id) === String(customerId));
+    if (selectedCustomer) {
+      setCustomerDraft(createCustomerDraft(selectedCustomer));
+    }
   }
 
   function toggleMeal(meal) {
@@ -186,33 +174,32 @@ export default function CustomerList() {
       meal_plan: customerDraft.meal_plan,
       start_date: customerDraft.start_date || null,
       end_date: customerDraft.end_date || null,
-      credit_balance: toNumber(customerDraft.credit_balance),
     };
 
     let error, data;
+    const isNew = selectedCustomerId === 'new';
 
-    // Detect if we are creating a new user or updating an existing one
-    if (selectedCustomerId === 'new') {
-      const result = await supabase.from('customers').insert([payload]).select().single();
-      error = result.error;
-      data = result.data;
+    if (isNew) {
+      const response = await supabase.from('customers').insert([payload]).select();
+      error = response.error;
+      data = response.data;
     } else {
-      const result = await supabase.from('customers').update(payload).eq('id', customerDraft.id).select().single();
-      error = result.error;
-      data = result.data;
+      const response = await supabase.from('customers').update(payload).eq('id', selectedCustomerId).select();
+      error = response.error;
+      data = response.data;
     }
 
     if (error) {
       setMessage(error.message ?? 'Unable to save customer.');
     } else {
-      setMessage(selectedCustomerId === 'new' ? 'New customer created successfully!' : 'Customer details saved.');
+      setMessage(isNew ? 'New customer created successfully.' : 'Customer details saved.');
       
-      const { data: updatedCustomers } = await supabase.from('customers').select('*').order('name', { ascending: true });
-      setCustomers(updatedCustomers ?? []);
-      
-      if (data) {
-        setSelectedCustomerId(String(data.id));
-        setCustomerDraft(createCustomerDraft(data));
+      const { data: updatedList } = await supabase.from('customers').select('*').order('name', { ascending: true });
+      setCustomers(updatedList ?? []);
+
+      if (isNew && data?.[0]) {
+        setSelectedCustomerId(String(data[0].id));
+        setCustomerDraft(createCustomerDraft(data[0]));
       }
     }
 
@@ -240,13 +227,11 @@ export default function CustomerList() {
       const { data } = await supabase.from('global_settings').select('*').maybeSingle();
       setSettings(data ?? null);
     }
-
     setSavingSettings(false);
   }
 
   async function toggleArchive(customer) {
     setMessage('');
-
     const { error } = await persistArchiveState(customer.id, !isArchivedCustomer(customer));
 
     if (error) {
@@ -255,7 +240,6 @@ export default function CustomerList() {
     }
 
     setMessage(isArchivedCustomer(customer) ? 'Customer restored.' : 'Customer archived.');
-
     const { data } = await supabase.from('customers').select('*').order('name', { ascending: true });
     setCustomers(data ?? []);
   }
@@ -292,13 +276,16 @@ export default function CustomerList() {
           <div className="editor-panel__header">
             <div>
               <span className="eyebrow">Customer editor</span>
-              <h3>{selectedCustomerId === 'new' ? 'Add New Customer' : 'Customer details'}</h3>
+              <h3>Customer details</h3>
             </div>
 
+            {}
             <label className="field field--date">
-              <span>Select Profile</span>
-              <select value={selectedCustomerId} onChange={(event) => handleCustomerSelectChange(event.target.value)}>
-                <option value="new" style={{ fontWeight: 'bold' }}>+ Add New Customer</option>
+              <span>Customer</span>
+              <select value={selectedCustomerId} onChange={(event) => selectCustomer(event.target.value)}>
+                <optgroup label="Actions">
+                  <option value="new">+ Add New Customer</option>
+                </optgroup>
                 <optgroup label="Existing Customers">
                   {customers.map((customer) => (
                     <option key={customer.id} value={customer.id}>
@@ -316,26 +303,7 @@ export default function CustomerList() {
               <input
                 value={customerDraft.name}
                 onChange={(event) => setCustomerDraft((previous) => ({ ...previous, name: event.target.value }))}
-              />
-            </label>
-
-            <label className="field">
-              <span>Mobile Number</span>
-              <input
-                type="tel"
-                placeholder="e.g. 9876543210"
-                value={customerDraft.mobile}
-                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, mobile: event.target.value }))}
-              />
-            </label>
-
-            <label className="field">
-              <span>Address (Geo Point)</span>
-              <input
-                type="text"
-                placeholder="Address or Maps Link"
-                value={customerDraft.geo_point}
-                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, geo_point: event.target.value }))}
+                placeholder="Full Name"
               />
             </label>
 
@@ -350,6 +318,27 @@ export default function CustomerList() {
               </select>
             </label>
 
+            <label className="field">
+              <span>Mobile No.</span>
+              <input
+                type="tel"
+                value={customerDraft.mobile}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, mobile: event.target.value }))}
+                placeholder="Phone number"
+              />
+            </label>
+
+            <label className="field">
+              <span>Address / Geo Point</span>
+              <input
+                type="text"
+                value={customerDraft.geo_point}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, geo_point: event.target.value }))}
+                placeholder="Address or Maps link"
+              />
+            </label>
+
+            {}
             <label className="field">
               <span>Start date</span>
               <input
@@ -368,15 +357,6 @@ export default function CustomerList() {
               />
             </label>
 
-            <label className="field">
-              <span>Credit balance</span>
-              <input
-                type="number"
-                value={customerDraft.credit_balance}
-                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, credit_balance: event.target.value }))}
-              />
-            </label>
-
             <div className="field">
               <span>Meal plan</span>
               <div className="checkbox-grid">
@@ -392,11 +372,12 @@ export default function CustomerList() {
 
           <div className="form-actions">
             <button type="button" className="action-button" onClick={saveCustomer} disabled={savingCustomer}>
-              {savingCustomer ? 'Saving...' : (selectedCustomerId === 'new' ? 'Create customer' : 'Save changes')}
+              {savingCustomer ? 'Saving...' : selectedCustomerId === 'new' ? 'Create Customer' : 'Save Changes'}
             </button>
           </div>
         </article>
 
+        {}
         <article className="editor-panel">
           <div className="editor-panel__header">
             <div>
@@ -414,7 +395,6 @@ export default function CustomerList() {
                 onChange={(event) => setSettingsDraft((previous) => ({ ...previous, base_breakfast: event.target.value }))}
               />
             </label>
-
             <label className="field">
               <span>Lunch cost</span>
               <input
@@ -423,7 +403,6 @@ export default function CustomerList() {
                 onChange={(event) => setSettingsDraft((previous) => ({ ...previous, base_lunch: event.target.value }))}
               />
             </label>
-
             <label className="field">
               <span>Dinner cost</span>
               <input
@@ -432,7 +411,6 @@ export default function CustomerList() {
                 onChange={(event) => setSettingsDraft((previous) => ({ ...previous, base_dinner: event.target.value }))}
               />
             </label>
-
             <label className="field">
               <span>NV premium</span>
               <input
@@ -451,6 +429,7 @@ export default function CustomerList() {
         </article>
       </div>
 
+      {}
       {loading ? (
         <div className="empty-state">Loading customer profiles...</div>
       ) : customers.length === 0 ? (
@@ -459,7 +438,6 @@ export default function CustomerList() {
         <div className="customer-grid">
           {customers.map((customer) => {
             const mealPlan = normalizeMealPlan(customer.meal_plan);
-            const isCreditPositive = toNumber(customer.credit_balance) >= 0;
             const archived = isArchivedCustomer(customer);
 
             return (
@@ -470,8 +448,8 @@ export default function CustomerList() {
                     <p>{formatPreference(customer.preference)}</p>
                   </div>
                   <div className="customer-card__stack">
-                    <span className={`status-chip ${archived ? 'status-chip--neutral' : isCreditPositive ? 'status-chip--success' : 'status-chip--warning'}`}>
-                      {archived ? 'Archived' : formatCurrency(customer.credit_balance)}
+                    <span className={`status-chip ${archived ? 'status-chip--neutral' : 'status-chip--success'}`}>
+                      {archived ? 'Archived' : 'Active'}
                     </span>
                   </div>
                 </div>
@@ -500,7 +478,7 @@ export default function CustomerList() {
                 </dl>
 
                 <div className="customer-card__footer">
-                  <span>{archived ? 'Hidden from active operations' : isCreditPositive ? 'Carry-forward credit' : 'Outstanding due'}</span>
+                  <span>{archived ? 'Hidden from active operations' : 'Managed in ledger'}</span>
                   <div className="customer-card__actions">
                     <button type="button" className="text-button" onClick={() => selectCustomer(String(customer.id))}>
                       Edit
