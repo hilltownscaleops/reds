@@ -33,7 +33,8 @@ function createCustomerDraft(customer) {
     preference: String(customer.preference ?? 'veg').toLowerCase(),
     meal_plan: normalizeMealPlan(customer.meal_plan),
     start_date: customer.start_date ?? '',
-    end_date: customer.end_date ?? ''
+    end_date: customer.end_date ?? '',
+    credit_balance: String(customer.credit_balance ?? 0),
   };
 }
 
@@ -315,6 +316,26 @@ export default function CustomerList() {
               <input
                 value={customerDraft.name}
                 onChange={(event) => setCustomerDraft((previous) => ({ ...previous, name: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>Mobile Number</span>
+              <input
+                type="tel"
+                placeholder="e.g. 9876543210"
+                value={customerDraft.mobile}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, mobile: event.target.value }))}
+              />
+            </label>
+
+            <label className="field">
+              <span>Address (Geo Point)</span>
+              <input
+                type="text"
+                placeholder="Address or Maps Link"
+                value={customerDraft.geo_point}
+                onChange={(event) => setCustomerDraft((previous) => ({ ...previous, geo_point: event.target.value }))}
               />
             </label>
 
