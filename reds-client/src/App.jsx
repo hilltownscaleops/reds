@@ -53,6 +53,10 @@ function getMealButtonClass(status) {
   return 'meal-toggle meal-toggle--inactive';
 }
 
+
+const upiId = import.meta.env.VITE_UPI; // CHANGE THIS TO YOUR ACTUAL UPI ID
+const mobno = import.meta.env.VITE_MOBNO;// CHANGE THIS TO YOUR ACTUAL MOBILE NUMBER
+ 
 export default function App() {
   const [mobileInput, setMobileInput] = useState('');
   const [pinInput, setPinInput] = useState(''); // NEW: Pin State
@@ -68,22 +72,38 @@ export default function App() {
 
   // Custom Dialog State
   const [dialog, setDialog] = useState(null);
-  const [topupAmount, setTopupAmount] = useState(''); // Initialized empty, populated dynamically
-  const upiId = 'mr.srik307@okicici'; // CHANGE THIS TO YOUR ACTUAL UPI ID
-  const mobile = '9876543210'; // CHANGE THIS TO YOUR ACTUAL MOBILE NUMBER FOR GPAY
+  const [topupAmount, setTopupAmount] = useState('');
 
-  // Dynamically calculate the minimum top-up based on their meal plan
+  // 1. Calculate Wallet FIRST so it's ready for the next calculations
+  const wallet = useMemo(() => {
+    if (!settings) return { totalEaten: 0, totalTopup: 0, carryover: 0 };
+    
+    const totalEaten = calculateLifetimeEaten(roster, settings);
+    const totalTopup = transactions.reduce((sum, tx) => sum + toNumber(tx.amount), 0);
+    const carryover = totalTopup - totalEaten;
+
+    return { totalEaten, totalTopup, carryover };
+  }, [roster, transactions, settings]);
+
+  // 2. Calculate their week base plan
   const baseWeekPlan = useMemo(() => {
-    if (!customer || !settings) return 500; // Fallback before data loads
+    if (!customer || !settings) return 0;
     return calculateBaseWeeklyCost(customer, settings);
   }, [customer, settings]);
 
-  // Pre-fill the top-up input with their exact weekly base cost once loaded
+  // 3. Calculate suggested top-up (Base Week - Current Balance)
+  const suggestedTopup = useMemo(() => {
+    return Math.max(0, baseWeekPlan - wallet.carryover);
+  }, [baseWeekPlan, wallet.carryover]);
+
+  // 4. Pre-fill the top-up box with the suggested amount
   useEffect(() => {
-    if (baseWeekPlan) {
-      setTopupAmount(baseWeekPlan);
+    if (suggestedTopup > 0) {
+      setTopupAmount(suggestedTopup);
+    } else if (baseWeekPlan > 0) {
+      setTopupAmount(baseWeekPlan); // Fallback if they have plenty of credits
     }
-  }, [baseWeekPlan]);
+  }, [suggestedTopup, baseWeekPlan]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -171,16 +191,6 @@ export default function App() {
     setTransactions(txRes.data || []);
     setLoading(false);
   }
-
-  const wallet = useMemo(() => {
-    if (!settings) return { totalEaten: 0, totalTopup: 0, carryover: 0 };
-    
-    const totalEaten = calculateLifetimeEaten(roster, settings);
-    const totalTopup = transactions.reduce((sum, tx) => sum + toNumber(tx.amount), 0);
-    const carryover = totalTopup - totalEaten;
-
-    return { totalEaten, totalTopup, carryover };
-  }, [roster, transactions, settings]);
 
   const currentWeek = useMemo(() => {
     const start = getMonday(baseDate);
@@ -285,8 +295,9 @@ export default function App() {
   }
 
   function handleTopup() {
-    const amount = Math.max(baseWeekPlan, toNumber(topupAmount));
-    const upiLink = `upi://pay?pa=${upiId}&pn=redsfoods&am=${amount}&cu=INR`;
+    // Removed strict minimum enforcement, accepts whatever they type (min 1)
+    const amount = Math.max(1, toNumber(topupAmount));
+    const upiLink = `upi://pay?pa=${upiId}&pn=Homefoods&am=${amount}&cu=INR`;
     
     // Attempt to open the UPI app on the user's phone
     window.location.href = upiLink;
@@ -412,19 +423,22 @@ export default function App() {
             <div>
               <p className="eyebrow">Top-up</p>
               <h2>Add Credits</h2>
-              <p className="panel__description">Minimum top-up is ₹{baseWeekPlan} (your weekly base). Use UPI to add funds quickly.</p>
+              <p className="panel__description">
+                Weekly base: <strong>₹{baseWeekPlan}</strong>. Suggested top-up: <strong>₹{suggestedTopup}</strong>.
+              </p>
             </div>
             <div className="topup-row">
               <input
                 className="form-input topup-input"
                 type="number"
-                min={baseWeekPlan}
+                min="1"
                 value={topupAmount}
                 onChange={(e) => setTopupAmount(e.target.value)}
               />
               <button className="action-button" onClick={handleTopup}>Pay UPI</button>
 
-               <p className="panel__description">Or gpay to this mobile no. {mobile}</p>
+              <p className="panel__description"> or gpay the amount to this no. <strong>{mobno}</strong>.
+              </p>
             </div>
           </div>
 
@@ -436,11 +450,6 @@ export default function App() {
             <div>
               <p className="eyebrow">Weekly roster</p>
               <h2>This Week's Schedule</h2>
-            </div>
-            <div className="schedule-nav">
-              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, -7))}>Prev</button>
-              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate(new Date())}>Today</button>
-              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, 7))}>Next</button>
             </div>
           </div>
 
@@ -457,11 +466,6 @@ export default function App() {
 
               return (
                 <article key={row.roster_date} className={`day-card ${isToday ? 'day-card--today' : ''}`}>
-                  <div className="day-card__date">
-                    <span>{dateObj.toLocaleDateString('en-IN', { weekday: 'short' })}</span>
-                    <strong>{dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</strong>
-                    {isToday && <span className="day-card__badge">Today</span>}
-                  </div>
 
                   <div className="day-card__meals">
                     {['b_status', 'l_status', 'd_status'].map((mealKey) => {
@@ -481,10 +485,22 @@ export default function App() {
                       );
                     })}
                   </div>
+
+                  <div className="day-card__date">
+                    <span>{dateObj.toLocaleDateString('en-IN', { weekday: 'short' })}</span>
+                    <strong>{dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</strong>
+                    {isToday && <span className="day-card__badge">Today</span>}
+                  </div>
                 </article>
               );
             })}
           </div>
+
+              <div className="schedule-nav">
+              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, -7))}>Prev week</button>
+              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate(new Date())}>Today</button>
+              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, 7))}>Next week</button>
+            </div>
         </section>
       </main>
     </div>
