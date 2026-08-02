@@ -72,7 +72,6 @@ export default function App() {
 
   // Custom Dialog State
   const [dialog, setDialog] = useState(null);
-  const [topupAmount, setTopupAmount] = useState('');
 
   // 1. Calculate Wallet FIRST so it's ready for the next calculations
   const wallet = useMemo(() => {
@@ -95,15 +94,6 @@ export default function App() {
   const suggestedTopup = useMemo(() => {
     return Math.max(0, baseWeekPlan - wallet.carryover);
   }, [baseWeekPlan, wallet.carryover]);
-
-  // 4. Pre-fill the top-up box with the suggested amount
-  useEffect(() => {
-    if (suggestedTopup > 0) {
-      setTopupAmount(suggestedTopup);
-    } else if (baseWeekPlan > 0) {
-      setTopupAmount(baseWeekPlan); // Fallback if they have plenty of credits
-    }
-  }, [suggestedTopup, baseWeekPlan]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -294,22 +284,6 @@ export default function App() {
     }
   }
 
-  function handleTopup() {
-    // Removed strict minimum enforcement, accepts whatever they type (min 1)
-    const amount = Math.max(1, toNumber(topupAmount));
-    const upiLink = `upi://pay?pa=${upiId}&pn=Homefoods&am=${amount}&cu=INR`;
-    
-    // Attempt to open the UPI app on the user's phone
-    window.location.href = upiLink;
-
-    setDialog({
-      title: "Top-up Initiated",
-      message: "If your UPI app did not open automatically, please complete the payment manually. Once done, share the screenshot with Homefoods Admin to unlock your credits.",
-      confirmText: "Done",
-      onConfirm: () => setDialog(null)
-    });
-  }
-
   if (!customer) {
     return (
       <div className="customer-app">
@@ -427,22 +401,11 @@ export default function App() {
                 Weekly base: <strong>₹{baseWeekPlan}</strong>. Suggested top-up: <strong>₹{suggestedTopup}</strong>.
               </p>
             </div>
-            <div className="topup-row">
-              <input
-                className="form-input topup-input"
-                type="number"
-                min="1"
-                value={topupAmount}
-                onChange={(e) => setTopupAmount(e.target.value)}
-              />
-              <button className="action-button" onClick={handleTopup}>Pay UPI</button>
-
-              <p className="panel__description"> or gpay the amount to this no. <strong>{mobno}</strong>.
-              </p>
-            </div>
           </div>
 
-          <p className="table-note">After payment, share the screenshot with Homefoods Admin to unlock your credits.</p>
+          <div className="table-note" style={{marginTop: 0, padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px'}}>
+            <p style={{margin: 0, color: 'white'}}>Please GPay your top-up amount to <strong>{mobno}</strong> and share the screenshot with Homefoods Admin to update your balance.</p>
+          </div>
         </section>
 
         <section className="panel">
