@@ -18,12 +18,15 @@ function calculateWeeklyEaten(customer, rosterRows, settings) {
   rosterRows.forEach((row) => {
     // Breakfast
     if (row.b_status === 'active') eatenTotal += toNumber(settings.base_breakfast);
+    else if (row.b_status === 'late_skipped') eatenTotal += toNumber(settings.base_breakfast) * 0.3;
     
     // Lunch
     if (row.l_status === 'active' || row.l_status === 'nv_downgraded') {
       eatenTotal += toNumber(settings.base_lunch);
     } else if (row.l_status === 'active_nv') {
       eatenTotal += toNumber(settings.base_lunch) + toNumber(settings.nv_premium);
+    } else if (row.l_status === 'late_skipped') {
+      eatenTotal += toNumber(settings.base_lunch) * 0.3;
     }
     
     // Dinner
@@ -31,6 +34,8 @@ function calculateWeeklyEaten(customer, rosterRows, settings) {
       eatenTotal += toNumber(settings.base_dinner);
     } else if (row.d_status === 'active_nv') {
       eatenTotal += toNumber(settings.base_dinner) + toNumber(settings.nv_premium);
+    } else if (row.d_status === 'late_skipped') {
+      eatenTotal += toNumber(settings.base_dinner) * 0.3;
     }
   });
 
