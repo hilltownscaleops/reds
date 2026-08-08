@@ -127,7 +127,17 @@ function SortableRosterRow({ row, date, savingKey, handleStatusChange, removeCus
             &#x2630;
           </div>
         )}
-        <strong style={{ wordBreak: 'break-word', whiteSpace: 'normal', lineHeight: '1.3', fontSize: '14px' }}>{customer.name}</strong>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <strong style={{ wordBreak: 'break-word', whiteSpace: 'normal', lineHeight: '1.3', fontSize: '14px' }}>{customer.name}</strong>
+          {/* NEW: Tiny B/L/D tags directly under the name for fast reading */}
+          <div style={{ display: 'flex', gap: '4px' }}>
+            {mealPlan.includes('breakfast') && <span title="Breakfast" style={{ fontSize: '9px', padding: '2px 4px', borderRadius: '4px', background: '#334155', color: '#cbd5e1', fontWeight: 'bold' }}>B</span>}
+            {mealPlan.includes('lunch') && <span title="Lunch" style={{ fontSize: '9px', padding: '2px 4px', borderRadius: '4px', background: '#334155', color: '#cbd5e1', fontWeight: 'bold' }}>L</span>}
+            {mealPlan.includes('dinner') && <span title="Dinner" style={{ fontSize: '9px', padding: '2px 4px', borderRadius: '4px', background: '#334155', color: '#cbd5e1', fontWeight: 'bold' }}>D</span>}
+          </div>
+        </div>
+
       </div>
 
       <div style={{ padding: '12px 0' }}>{formatPreference(customer.preference)}</div>
