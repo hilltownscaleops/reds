@@ -53,13 +53,11 @@ function getMealButtonClass(status) {
   return 'meal-toggle meal-toggle--inactive';
 }
 
-
-const upiId = import.meta.env.VITE_UPI; // CHANGE THIS TO YOUR ACTUAL UPI ID
-const mobno = import.meta.env.VITE_MOBNO;// CHANGE THIS TO YOUR ACTUAL MOBILE NUMBER
+const mobno = import.meta.env.VITE_MOBNO || '9876543210'; // CHANGE THIS TO YOUR ACTUAL MOBILE NUMBER IN .env
  
 export default function App() {
   const [mobileInput, setMobileInput] = useState('');
-  const [pinInput, setPinInput] = useState(''); // NEW: Pin State
+  const [pinInput, setPinInput] = useState('');
   const [customer, setCustomer] = useState(null);
   const [settings, setSettings] = useState(null);
   const [roster, setRoster] = useState([]);
@@ -122,7 +120,7 @@ export default function App() {
 
     // 3. Secretly authenticate with Supabase Auth to get a Secure JWT Token
     const fakeEmail = `${mobileInput}@homefoods.app`;
-    const securePaddedPassword = `${pinInput}-HomeFoodsAuth`; // Use exact salt
+    const securePaddedPassword = `${pinInput}-HomeFoodsAuth`; 
 
     let authRes = await supabase.auth.signInWithPassword({
       email: fakeEmail,
@@ -136,7 +134,6 @@ export default function App() {
         password: securePaddedPassword
       });
       
-      // If sign up fails (e.g. user exists but wrong password)
       if (authRes.error) {
         setLoginError(authRes.error.message);
         setLoading(false);
@@ -148,8 +145,6 @@ export default function App() {
       return;
     }
 
-    // CRITICAL FIX: Ensure Supabase actually gave us a secure session.
-    // If this triggers, you MUST turn off "Confirm Email" in Supabase!
     if (!authRes.data?.session) {
       setLoginError('SECURITY LOCK: You must turn off "Confirm Email" in Supabase Auth settings to enable login.');
       setLoading(false);
@@ -215,11 +210,22 @@ export default function App() {
       return;
     }
 
+    const dayOfWeek = rosterDateObj.getDay();
+
+    // STRICT WEEKEND LOCK: Block clicks if admin has disabled the day in Global Settings
+    if (dayOfWeek === 6 && !settings?.enable_saturday) {
+      setDialog({ title: "Service Unavailable", message: "We do not operate on Saturdays.", confirmText: "Okay", onConfirm: () => setDialog(null) });
+      return;
+    }
+    if (dayOfWeek === 0 && !settings?.enable_sunday) {
+      setDialog({ title: "Service Unavailable", message: "We do not operate on Sundays.", confirmText: "Okay", onConfirm: () => setDialog(null) });
+      return;
+    }
+
     const currentStatus = row[mealKey];
     const isCurrentlyEaten = ['active', 'active_nv', 'nv_downgraded'].includes(currentStatus);
     
     // Check if it is a Non-Veg special day
-    const dayOfWeek = rosterDateObj.getDay(); // 0 = Sun, 3 = Wed, 4 = Thu
     const isNonVeg = customer.preference && customer.preference.toLowerCase().includes('non');
     
     let nextActiveStatus = 'active';
@@ -402,9 +408,14 @@ export default function App() {
               </p>
             </div>
           </div>
-
-          <div className="table-note" style={{marginTop: 0, padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px'}}>
-            <p style={{margin: 0, color: 'white'}}>Please GPay your top-up amount to <strong>{mobno}</strong> and share the screenshot with Homefoods Admin to update your balance.</p>
+          
+          <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid #334155' }}>
+            <p style={{ margin: '0 0 12px 0', color: '#cbd5e1', lineHeight: '1.5' }}>
+              Please GPay to this mobile number and share the screenshot with Homefoods Admin to update your credits:
+            </p>
+            <h3 style={{ margin: 0, color: '#f97316', fontSize: '24px', letterSpacing: '1px' }}>
+              {mobno}
+            </h3>
           </div>
         </section>
 
@@ -426,10 +437,18 @@ export default function App() {
             {currentWeek.map((row) => {
               const dateObj = new Date(`${row.roster_date}T00:00:00`);
               const isToday = row.roster_date === todayDateKey;
+              
+              const dayOfWeek = dateObj.getDay();
+              const isWeekendDisabled = (dayOfWeek === 6 && !settings?.enable_saturday) || (dayOfWeek === 0 && !settings?.enable_sunday);
+
+              console.log(`Rendering ${row.roster_date}: isToday=${isToday}, isWeekendDisabled=${isWeekendDisabled}`);
 
               return (
-                <article key={row.roster_date} className={`day-card ${isToday ? 'day-card--today' : ''}`}>
-
+                <article 
+                  key={row.roster_date} 
+                  className={`day-card ${isToday ? 'day-card--today' : ''}`}
+                  style={isWeekendDisabled ? { opacity: 0.4, filter: 'grayscale(100%)', pointerEvents: 'none' } : {}}
+                >
                   <div className="day-card__meals">
                     {['b_status', 'l_status', 'd_status'].map((mealKey) => {
                       const status = row[mealKey] || 'skipped';
@@ -459,11 +478,11 @@ export default function App() {
             })}
           </div>
 
-              <div className="schedule-nav">
-              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, -7))}>Prev week</button>
-              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate(new Date())}>Today</button>
-              <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, 7))}>Next week</button>
-            </div>
+          <div className="schedule-nav">
+            <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, -7))}>Prev week</button>
+            <button className="tab-button schedule-nav__button" onClick={() => setBaseDate(new Date())}>Today</button>
+            <button className="tab-button schedule-nav__button" onClick={() => setBaseDate((current) => addDays(current, 7))}>Next week</button>
+          </div>
         </section>
       </main>
     </div>

@@ -5,6 +5,7 @@ import {
   closestCenter,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -77,7 +78,7 @@ function getDayLabel(dateString) {
 }
 
 function emptyMealCounts() {
-  return { breakfast: 0, lunch: 0, dinner: 0 };
+  return { breakfast: 0, lunch: 0, dinner: 0, nv_lunch: 0, nv_dinner: 0 };
 }
 
 function getMealName(mealColumn) {
@@ -96,30 +97,41 @@ function SortableRosterRow({ row, date, savingKey, handleStatusChange, removeCus
     position: 'relative',
     zIndex: isDragging ? 99 : 1,
     display: 'grid',
-    gridTemplateColumns: '40px 1.5fr 1fr 1.5fr 135px 135px 135px 1fr 100px', // Matches Grid Header
+    // UPDATED: Reduced name column width from 200px to 140px
+    gridTemplateColumns: 'minmax(140px, 1.2fr) 100px 1.5fr 135px 135px 135px 100px 100px', 
     gap: '12px',
     alignItems: 'center',
-    padding: '12px 16px',
     borderBottom: '1px solid #334155',
-    backgroundColor: isDragging ? '#1e293b' : 'transparent',
+    backgroundColor: isDragging ? '#334155' : 'transparent',
     boxShadow: isDragging ? '0 10px 15px -3px rgba(0, 0, 0, 0.5)' : 'none',
   };
 
   return (
     <div ref={setNodeRef} style={style}>
-      {/* Drag Handle ONLY appears if Reorder Mode is active */}
-      {isReorderMode ? (
-        <div {...attributes} {...listeners} style={{ cursor: 'grab', color: '#f97316', fontSize: '18px', textAlign: 'center', userSelect: 'none' }}>
-          &#x2630;
-        </div>
-      ) : (
-        <div></div>
-      )}
-      <div>
-        <strong>{customer.name}</strong>
+      {/* NEW: Sticky column to keep name visible when scrolling horizontally */}
+      <div style={{
+        position: 'sticky',
+        left: 0,
+        zIndex: 10,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        background: isDragging ? '#334155' : '#1e293b',
+        padding: '12px 12px',
+        borderRight: '1px solid #334155',
+        height: '100%',
+        boxSizing: 'border-box'
+      }}>
+        {isReorderMode && (
+          <div {...attributes} {...listeners} style={{ cursor: 'grab', color: '#f97316', fontSize: '20px', userSelect: 'none', touchAction: 'none', padding: '10px 4px 10px 0' }}>
+            &#x2630;
+          </div>
+        )}
+        <strong style={{ wordBreak: 'break-word', whiteSpace: 'normal', lineHeight: '1.3', fontSize: '14px' }}>{customer.name}</strong>
       </div>
-      <div>{formatPreference(customer.preference)}</div>
-      <div>
+
+      <div style={{ padding: '12px 0' }}>{formatPreference(customer.preference)}</div>
+      <div style={{ padding: '12px 0' }}>
         <div className="chip-list">
           {mealPlan.length ? mealPlan.map((meal) => <span className="chip" key={meal}>{MEAL_LABELS[meal]}</span>) : <span className="chip chip--muted">No plan</span>}
         </div>
@@ -129,7 +141,7 @@ function SortableRosterRow({ row, date, savingKey, handleStatusChange, removeCus
         const disabled = !mealState.subscribed;
 
         return (
-          <div key={mealColumn.key}>
+          <div key={mealColumn.key} style={{ padding: '12px 0' }}>
             <select
               className={`form-input status-toggle--${statusTone(mealState.status)}`}
               style={{ cursor: disabled ? 'not-allowed' : 'pointer', width: '100%' }}
@@ -153,8 +165,8 @@ function SortableRosterRow({ row, date, savingKey, handleStatusChange, removeCus
           </div>
         );
       })}
-      <div>{formatCurrency(baseCost)}</div>
-      <div>
+      <div style={{ padding: '12px 0' }}>{formatCurrency(baseCost)}</div>
+      <div style={{ padding: '12px 0' }}>
         <button type="button" className="text-button text-button--danger" onClick={() => removeCustomerFromRoster(customer)} disabled={savingKey === `remove-${customer.id}`}>
           Remove
         </button>
@@ -179,15 +191,23 @@ export default function DailyDashboard() {
   const [backupCustomers, setBackupCustomers] = useState([]);
   const [dialog, setDialog] = useState(null);
 
+  // NEW: Multi-Select Meal Filter State
+  const [mealFilters, setMealFilters] = useState([]); // Array of strings: 'breakfast', 'lunch', 'dinner'
+
+  // NEW: Weekend Toggle States
+  const [enableSaturday, setEnableSaturday] = useState(false);
+  const [enableSunday, setEnableSunday] = useState(false);
+
   const mountedRef = useRef(true);
 
   const weekDays = useMemo(() => buildWeekDates(date), [date]);
   const weekStart = weekDays[0];
   const weekEnd = weekDays[weekDays.length - 1];
 
-  // Configure drag sensors
+  // Configure drag sensors with TouchSensor for mobile long-press support
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
@@ -240,6 +260,12 @@ export default function DailyDashboard() {
       setCustomers(fetchedCustomers);
       setRoster(rosterResult.data ?? []);
       setSettings(settingsResult?.data ?? null);
+      
+      // Sync local toggles with database
+      if (settingsResult?.data) {
+        setEnableSaturday(settingsResult.data.enable_saturday ?? false);
+        setEnableSunday(settingsResult.data.enable_sunday ?? false);
+      }
     } catch (error) {
       if (mountedRef.current) {
         setMessage(error?.message ?? 'Unable to load daily roster.');
@@ -259,6 +285,20 @@ export default function DailyDashboard() {
       await loadRoster(date);
     })();
   }, [date]);
+
+  // NEW: Auto-switch date if user disables the currently selected weekend day
+  useEffect(() => {
+    const dateObj = parseDate(date);
+    if (!dateObj) return;
+    const dayOfWeek = dateObj.getDay();
+    
+    // 6 = Saturday, 0 = Sunday
+    if (dayOfWeek === 6 && !enableSaturday) {
+      setDate(formatDateInput(addDays(dateObj, -1))); // Switch to Friday
+    } else if (dayOfWeek === 0 && !enableSunday) {
+      setDate(formatDateInput(addDays(dateObj, -2))); // Switch to Friday (skip Sat)
+    }
+  }, [enableSaturday, enableSunday, date]);
 
   const rosterRowsForSelectedDay = useMemo(() => roster.filter((row) => isSameCalendarDate(row.roster_date, date)), [roster, date]);
   const rosterLookup = useMemo(() => new Map(rosterRowsForSelectedDay.map((row) => [String(row.customer_id), row])), [rosterRowsForSelectedDay]);
@@ -296,6 +336,39 @@ export default function DailyDashboard() {
     () => customers.filter((customer) => !rosterCustomerIds.has(String(customer.id)) && !isArchivedCustomer(customer) && isWithinCustomerWindow(customer, date)),
     [customers, rosterCustomerIds, date],
   );
+
+  // NEW: Filter the rows based on multi-select active meals
+  const filteredDayRows = useMemo(() => {
+    if (mealFilters.length === 0) return selectedDayRows;
+
+    return selectedDayRows.filter(({ customer, rosterRow }) => {
+      // Return TRUE if the customer is eating ANY of the selected meals
+      return mealFilters.some(filter => {
+        const mealKey = filter === 'breakfast' ? 'b_status' : filter === 'lunch' ? 'l_status' : 'd_status';
+        const state = buildMealState(customer, rosterRow, mealKey, date);
+        return ['active', 'active_nv', 'nv_downgraded'].includes(state.status);
+      });
+    });
+  }, [selectedDayRows, mealFilters, date]);
+
+  // Helper to toggle multi-select filters
+  function toggleMealFilter(meal) {
+    setMealFilters(prev => 
+      prev.includes(meal) ? prev.filter(m => m !== meal) : [...prev, meal]
+    );
+  }
+
+  // NEW: Save Weekend Toggles to Database
+  async function handleWeekendToggle(day, isChecked) {
+    if (day === 'sat') setEnableSaturday(isChecked);
+    if (day === 'sun') setEnableSunday(isChecked);
+
+    if (settings) {
+      await supabase.from('global_settings').update({
+        [day === 'sat' ? 'enable_saturday' : 'enable_sunday']: isChecked
+      }).eq('id', settings.id);
+    }
+  }
 
   // NEW: Toggle Reorder Mode & Handle Bulk Save
   function handleToggleReorder() {
@@ -524,25 +597,50 @@ export default function DailyDashboard() {
     (totals, row) => {
       const rosterRow = row.rosterRow;
       const isEaten = (status) => ['active', 'active_nv', 'nv_downgraded'].includes(status);
+      const isNV = (status) => status === 'active_nv';
 
       if (isEaten(rosterRow?.b_status)) totals.breakfast += 1;
-      if (isEaten(rosterRow?.l_status)) totals.lunch += 1;
-      if (isEaten(rosterRow?.d_status)) totals.dinner += 1;
+      
+      if (isEaten(rosterRow?.l_status)) {
+        totals.lunch += 1;
+        if (isNV(rosterRow?.l_status)) totals.nv_lunch += 1;
+      }
+      
+      if (isEaten(rosterRow?.d_status)) {
+        totals.dinner += 1;
+        if (isNV(rosterRow?.d_status)) totals.nv_dinner += 1;
+      }
 
       return totals;
     },
-    { breakfast: 0, lunch: 0, dinner: 0 },
+    { breakfast: 0, lunch: 0, dinner: 0, nv_lunch: 0, nv_dinner: 0 },
   );
 
   const calendarDays = weekDays.map((day) => {
+    const dateObj = parseDate(day);
+    const dayOfWeek = dateObj ? dateObj.getDay() : -1;
+    
+    let isDisabled = false;
+    if (dayOfWeek === 6 && !enableSaturday) isDisabled = true;
+    if (dayOfWeek === 0 && !enableSunday) isDisabled = true;
+
     const dayRows = dateLookup.get(day) ?? [];
     const mealCounts = dayRows.reduce(
       (totals, row) => {
         const isEaten = (status) => ['active', 'active_nv', 'nv_downgraded'].includes(status);
+        const isNV = (status) => status === 'active_nv';
 
         if (isEaten(row.b_status)) totals.breakfast += 1;
-        if (isEaten(row.l_status)) totals.lunch += 1;
-        if (isEaten(row.d_status)) totals.dinner += 1;
+        
+        if (isEaten(row.l_status)) {
+          totals.lunch += 1;
+          if (isNV(row.l_status)) totals.nv_lunch += 1;
+        }
+        
+        if (isEaten(row.d_status)) {
+          totals.dinner += 1;
+          if (isNV(row.d_status)) totals.nv_dinner += 1;
+        }
 
         return totals;
       },
@@ -555,6 +653,7 @@ export default function DailyDashboard() {
       mealCounts,
       totalMeals: mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner,
       isSelected: day === date,
+      isDisabled,
     };
   });
 
@@ -595,11 +694,17 @@ export default function DailyDashboard() {
         </div>
         <div className="summary-card">
           <span>Lunch</span>
-          <strong>{mealTotals.lunch}</strong>
+          <strong>
+            {mealTotals.lunch}
+            {mealTotals.nv_lunch > 0 && <small style={{fontSize: '14px', color: '#f87171', marginLeft: '6px'}}>(NV: {mealTotals.nv_lunch})</small>}
+          </strong>
         </div>
         <div className="summary-card">
           <span>Dinner</span>
-          <strong>{mealTotals.dinner}</strong>
+          <strong>
+            {mealTotals.dinner}
+            {mealTotals.nv_dinner > 0 && <small style={{fontSize: '14px', color: '#f87171', marginLeft: '6px'}}>(NV: {mealTotals.nv_dinner})</small>}
+          </strong>
         </div>
       </div>
 
@@ -615,12 +720,34 @@ export default function DailyDashboard() {
       </div>
 
       <section className="calendar-panel">
-        <div className="calendar-panel__header">
+        <div className="calendar-panel__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <span className="eyebrow">Weekly calendar</span>
             <h3>{getDayLabel(weekStart)} - {getDayLabel(weekEnd)}</h3>
+            <p>Click a day to load its roster in the table below.</p>
           </div>
-          <p>Click a day to load its roster in the table below.</p>
+          
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', background: '#1e293b', padding: '8px 16px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <span style={{ fontSize: '12px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 'bold' }}>Weekends:</span>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: enableSaturday ? '#f97316' : '#cbd5e1', fontSize: '13px', fontWeight: 'bold', userSelect: 'none' }}>
+              <input 
+                type="checkbox" 
+                checked={enableSaturday} 
+                onChange={(e) => handleWeekendToggle('sat', e.target.checked)} 
+                style={{ accentColor: '#f97316', width: '16px', height: '16px', cursor: 'pointer' }} 
+              />
+              Sat
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: enableSunday ? '#f97316' : '#cbd5e1', fontSize: '13px', fontWeight: 'bold', userSelect: 'none' }}>
+              <input 
+                type="checkbox" 
+                checked={enableSunday} 
+                onChange={(e) => handleWeekendToggle('sun', e.target.checked)} 
+                style={{ accentColor: '#f97316', width: '16px', height: '16px', cursor: 'pointer' }} 
+              />
+              Sun
+            </label>
+          </div>
         </div>
 
         <div className="calendar-grid">
@@ -630,13 +757,15 @@ export default function DailyDashboard() {
               type="button"
               className={`calendar-day ${day.isSelected ? 'calendar-day--selected' : ''}`}
               onClick={() => setDate(day.day)}
+              disabled={day.isDisabled}
+              style={day.isDisabled ? { opacity: 0.3, cursor: 'not-allowed', filter: 'grayscale(100%)', backgroundColor: '#0f172a' } : {}}
             >
               <span className="calendar-day__label">{day.label}</span>
               <strong>{day.totalMeals}</strong>
               <div className="calendar-day__counts">
                 <span>B {day.mealCounts.breakfast}</span>
-                <span>L {day.mealCounts.lunch}</span>
-                <span>D {day.mealCounts.dinner}</span>
+                <span>L {day.mealCounts.lunch} {day.mealCounts.nv_lunch > 0 && <span style={{color: '#f87171'}}>({day.mealCounts.nv_lunch} NV)</span>}</span>
+                <span>D {day.mealCounts.dinner} {day.mealCounts.nv_dinner > 0 && <span style={{color: '#f87171'}}>({day.mealCounts.nv_dinner} NV)</span>}</span>
               </div>
             </button>
           ))}
@@ -655,11 +784,26 @@ export default function DailyDashboard() {
               <h3>{getDayLabel(date)}</h3>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div className="day-roster-panel__meta">
-                <span className="status-chip status-chip--neutral">Breakfast {mealTotals.breakfast}</span>
-                <span className="status-chip status-chip--neutral">Lunch {mealTotals.lunch}</span>
-                <span className="status-chip status-chip--neutral">Dinner {mealTotals.dinner}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+              <div className="day-roster-panel__meta" style={{ display: 'flex', gap: '8px' }}>
+                <button 
+                  onClick={() => toggleMealFilter('breakfast')}
+                  style={{ padding: '6px 16px', borderRadius: '20px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${mealFilters.includes('breakfast') ? '#f97316' : '#334155'}`, background: mealFilters.includes('breakfast') ? '#f97316' : '#1e293b', color: mealFilters.includes('breakfast') ? 'white' : '#cbd5e1' }}
+                >
+                  Breakfast {mealTotals.breakfast}
+                </button>
+                <button 
+                  onClick={() => toggleMealFilter('lunch')}
+                  style={{ padding: '6px 16px', borderRadius: '20px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${mealFilters.includes('lunch') ? '#f97316' : '#334155'}`, background: mealFilters.includes('lunch') ? '#f97316' : '#1e293b', color: mealFilters.includes('lunch') ? 'white' : '#cbd5e1' }}
+                >
+                  Lunch {mealTotals.lunch} {mealTotals.nv_lunch > 0 && <span style={{color: mealFilters.includes('lunch') ? '#fecaca' : '#f87171', marginLeft: '4px'}}>(NV: {mealTotals.nv_lunch})</span>}
+                </button>
+                <button 
+                  onClick={() => toggleMealFilter('dinner')}
+                  style={{ padding: '6px 16px', borderRadius: '20px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${mealFilters.includes('dinner') ? '#f97316' : '#334155'}`, background: mealFilters.includes('dinner') ? '#f97316' : '#1e293b', color: mealFilters.includes('dinner') ? 'white' : '#cbd5e1' }}
+                >
+                  Dinner {mealTotals.dinner} {mealTotals.nv_dinner > 0 && <span style={{color: mealFilters.includes('dinner') ? '#fecaca' : '#f87171', marginLeft: '4px'}}>(NV: {mealTotals.nv_dinner})</span>}
+                </button>
               </div>
               
               {/* NEW: Reorder Toggle Switch */}
@@ -675,16 +819,15 @@ export default function DailyDashboard() {
             </div>
           </div>
 
-          {/* NEW: Replaced Table with CSS Grid and dnd-kit context */}
-          <div className="table-shell" style={{ overflowX: 'auto', padding: '10px 0' }}>
+          <div className="table-shell" style={{ overflowX: 'auto', padding: '0', position: 'relative' }}>
             <div style={{ minWidth: '1000px', display: 'flex', flexDirection: 'column' }}>
               
               {/* Header Row */}
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: '40px 1.5fr 1fr 1.5fr 135px 135px 135px 1fr 100px',
+                // UPDATED: Matched Header column width to rows (140px)
+                gridTemplateColumns: 'minmax(140px, 1.2fr) 100px 1.5fr 135px 135px 135px 100px 100px',
                 gap: '12px',
-                padding: '12px 16px',
                 borderBottom: '2px solid #334155',
                 color: '#94a3b8',
                 fontWeight: '600',
@@ -693,21 +836,20 @@ export default function DailyDashboard() {
                 letterSpacing: '0.05em',
                 textAlign: 'left'
               }}>
-                <div></div>
-                <div>Customer</div>
-                <div>Preference</div>
-                <div>Meal plan</div>
-                <div>Breakfast</div>
-                <div>Lunch</div>
-                <div>Dinner</div>
-                <div>Week base</div>
-                <div>Action</div>
+                <div style={{ position: 'sticky', left: 0, background: '#1e293b', zIndex: 10, padding: '12px 16px', borderRight: '1px solid #334155' }}>Customer</div>
+                <div style={{ padding: '12px 0' }}>Preference</div>
+                <div style={{ padding: '12px 0' }}>Meal plan</div>
+                <div style={{ padding: '12px 0' }}>Breakfast</div>
+                <div style={{ padding: '12px 0' }}>Lunch</div>
+                <div style={{ padding: '12px 0' }}>Dinner</div>
+                <div style={{ padding: '12px 0' }}>Week base</div>
+                <div style={{ padding: '12px 0' }}>Action</div>
               </div>
 
-              {/* Draggable Rows */}
+              {/* Draggable Rows (Using Filtered Data) */}
               <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                <SortableContext items={selectedDayRows.map(r => r.customer.id)} strategy={verticalListSortingStrategy}>
-                  {selectedDayRows.map((row) => (
+                <SortableContext items={filteredDayRows.map(r => r.customer.id)} strategy={verticalListSortingStrategy}>
+                  {filteredDayRows.map((row) => (
                     <SortableRosterRow
                       key={row.customer.id}
                       row={row}
